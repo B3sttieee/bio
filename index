@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moje BIO / Gaming & Social</title>
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top, #1f2937 0%, #0f172a 55%, #020617 100%);
+      --card: rgba(15, 23, 42, 0.85);
+      --accent: #38bdf8;
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --radius: 18px;
+      --duration: 0.28s;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--bg);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 32px 16px;
+      color: var(--text);
+    }
+
+    .wrapper {
+      width: min(980px, 100%);
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 820px) {
+      .wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* LEFT: avatar & main bio */
+    .profile-card {
+      background: linear-gradient(160deg, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.15) 100%);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: 20px;
+      padding: 24px 20px 20px;
+      text-align: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+    }
+
+    .avatar {
+      width: 110px;
+      height: 110px;
+      border-radius: 9999px;
+      background: linear-gradient(120deg, #38bdf8 0%, #6366f1 100%);
+      margin: 0 auto 16px;
+      display: grid;
+      place-items: center;
+      font-size: 42px;
+      font-weight: 700;
+      color: #0f172a;
+      border: 3px solid rgba(226, 232, 240, 0.3);
+    }
+
+    .nickname {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+    }
+
+    .tagline {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .short-bio {
+      margin-top: 14px;
+      font-size: 0.82rem;
+      line-height: 1.4;
+      color: #cbd5f5;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+      justify-content: center;
+    }
+
+    .tag {
+      background: rgba(3, 105, 161, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 0.7rem;
+      color: #e2e8f0;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* RIGHT: expandable sections */
+    .sections {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .section {
+      background: rgba(2, 6, 23, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.12);
+      border-radius: var(--radius);
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      transition: transform var(--duration) ease;
+    }
+
+    .section:hover {
+      transform: translateY(-2px);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 16px 14px 16px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .section-header::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, rgba(56,189,248,0.1) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+    }
+
+    .section-header:hover::after {
+      opacity: 1;
+    }
+
+    .icon-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.5);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      font-weight: 600;
+    }
+
+    .section-sub {
+      font-size: 0.65rem;
+      color: var(--muted);
+    }
+
+    .chevron {
+      margin-left: auto;
+      width: 20px;
+      height: 20px;
+      transition: transform var(--duration) ease;
+      opacity: 0.8;
+    }
+
+    .section-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height var(--duration) ease;
+      background: rgba(15, 23, 42, 0.08);
+    }
+
+    .section.active .section-content {
+      max-height: 220px; /* enough for a few items */
+    }
+
+    .section.active .chevron {
+      transform: rotate(180deg);
+    }
+
+    .list {
+      padding: 10px 16px 14px 58px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .list-item {
+      background: rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      border-radius: 12px;
+      padding: 7px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.78rem;
+    }
+
+    .list-item span.label {
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .list-item span.value {
+      color: #bae6fd;
+      font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.72rem;
+    }
+
+    .badge-small {
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid rgba(125, 211, 252, 0.2);
+      padding: 2px 6px 1px;
+      border-radius: 999px;
+      font-size: 0.6rem;
+      color: #e2e8f0;
+    }
+
+    .github-link {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(15, 23, 42, 0.45);
+      border: 1px solid rgba(148, 163, 184, 0.15);
+      border-radius: 999px;
+      padding: 6px 14px;
+      font-size: 0.7rem;
+      text-decoration: none;
+      color: #e2e8f0;
+      transition: transform 0.15s ease;
+    }
+
+    .github-link:hover {
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+<body>
+  <main class="wrapper">
+    <!-- LEFT COLUMN -->
+    <section class="profile-card">
+      <div class="avatar" aria-label="Avatar">
+        <!-- możesz tu wsadzić inicjały albo 🌀 -->
+        🌀
+      </div>
+      <div class="nickname">TwojaKsywa</div>
+      <div class="tagline">gaming • social • creator</div>
+      <p class="short-bio">
+        Hej! Tu moje dane do gier i platform – klikaj w sekcje po prawej, żeby rozwinąć listy.
+      </p>
+      <div class="tags">
+        <span class="tag">🎮 Roblox</span>
+        <span class="tag">⚔ Riot</span>
+        <span class="tag">💬 Discord</span>
+        <span class="tag">🎧 Spotify</span>
+      </div>
+      <a class="github-link" href="#" target="_blank" rel="noreferrer">
+        <span>🐱 GitHub</span>
+        <span class="badge-small">to jest GitHub!!</span>
+      </a>
+    </section>
+
+    <!-- RIGHT COLUMN -->
+    <section class="sections">
+      <!-- ROBLOX -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">🧱</div>
+          <div>
+            <div class="section-title">Roblox</div>
+            <div class="section-sub">nick / profil / ewentualnie ID</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Nick</span>
+              <span class="value">YourRobloxName</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Profil</span>
+              <span class="value">roblox.com/users/123456</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- RIOT -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">⚔</div>
+          <div>
+            <div class="section-title">Riot Games</div>
+            <div class="section-sub">LoL / VAL / TFT</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Riot ID</span>
+              <span class="value">Nick#EUW</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Valorant</span>
+              <span class="value">YourValo#123</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- DISCORD -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">💬</div>
+          <div>
+            <div class="section-title">Discord</div>
+            <div class="section-sub">z kim się skontaktować</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Discord</span>
+              <span class="value">@yourdiscord</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Serwer</span>
+              <span class="value">discord.gg/yourlink</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- EPIC GAMES -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">🕹</div>
+          <div>
+            <div class="section-title">Epic Games</div>
+            <div class="section-sub">Fortnite / EG nick</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Nick Fortnite</span>
+              <span class="value">YourFNname</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- SPOTIFY -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">🎧</div>
+          <div>
+            <div class="section-title">Spotify</div>
+            <div class="section-sub">playlist / profil</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Profil</span>
+              <span class="value">open.spotify.com/user/yourid</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Ulubiona playlista</span>
+              <span class="value">open.spotify.com/playlist/xyz</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- GITHUB -->
+      <article class="section">
+        <header class="section-header">
+          <div class="icon-badge">🐱</div>
+          <div>
+            <div class="section-title">GitHub</div>
+            <div class="section-sub">to jest GitHub!!</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </header>
+        <div class="section-content">
+          <div class="list">
+            <div class="list-item">
+              <span class="label">Account</span>
+              <span class="value">github.com/yourname</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Fav repo</span>
+              <span class="value">github.com/yourname/cool-project</span>
+            </div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+  <script>
+    // simple accordion logic
+    const sections = document.querySelectorAll('.section');
+    sections.forEach(section => {
+      const header = section.querySelector('.section-header');
+      header.addEventListener('click', () => {
+        // if you want only one open at a time, uncomment below:
+        // sections.forEach(s => { if (s !== section) s.classList.remove('active'); });
+        section.classList.toggle('active');
+      });
+    });
+  </script>
+</body>
+</html>
