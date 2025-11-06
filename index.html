@@ -6,13 +6,18 @@
   <title>Moje BIO / Gaming & Social</title>
   <style>
     :root {
-      --bg: radial-gradient(circle at top, #1f2937 0%, #0f172a 55%, #020617 100%);
-      --card: rgba(15, 23, 42, 0.85);
+      --bg1: #020617;
+      --bg2: #0f172a;
+      --bg3: #020617;
+      --panel: rgba(4, 6, 18, 0.45);
+      --panel-border: rgba(148, 163, 184, 0.15);
       --accent: #38bdf8;
+      --accent2: #6366f1;
       --text: #e2e8f0;
       --muted: #94a3b8;
-      --radius: 18px;
-      --duration: 0.28s;
+      --radius-lg: 22px;
+      --radius-md: 18px;
+      --dur: 0.3s;
     }
 
     * {
@@ -22,93 +27,191 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #121a2b 0%, #020617 50%);
+      color: var(--text);
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 32px 16px;
-      color: var(--text);
+      padding: 30px 16px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* animated faint blobs */
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      width: 420px;
+      height: 420px;
+      border-radius: 999px;
+      filter: blur(110px);
+      opacity: 0.28;
+      pointer-events: none;
+      animation: float 16s ease-in-out infinite;
+    }
+
+    body::before {
+      background: #38bdf8;
+      top: -120px;
+      left: -120px;
+    }
+    body::after {
+      background: #6366f1;
+      bottom: -120px;
+      right: -100px;
+      animation-delay: 3s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(30px) scale(1.05); }
     }
 
     .wrapper {
-      width: min(980px, 100%);
+      width: min(1100px, 100%);
       display: grid;
-      grid-template-columns: 300px 1fr;
-      gap: 24px;
+      grid-template-columns: 320px 1fr;
+      gap: 28px;
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 880px) {
       .wrapper {
         grid-template-columns: 1fr;
       }
     }
 
-    /* LEFT: avatar & main bio */
+    /* LEFT CARD */
     .profile-card {
-      background: linear-gradient(160deg, rgba(15,23,42,0.8) 0%, rgba(15,23,42,0.15) 100%);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-      border-radius: 20px;
-      padding: 24px 20px 20px;
-      text-align: center;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.25) 80%);
+      border: 1px solid rgba(148,163,184,0.06);
+      border-radius: 28px;
+      padding: 26px 22px 24px;
+      backdrop-filter: blur(14px);
+      box-shadow: 0 24px 50px rgba(0,0,0,0.35);
+      position: sticky;
+      top: 26px;
+      animation: cardFloat 8s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .avatar-wrap {
+      display: grid;
+      place-items: center;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .avatar-ring {
+      position: absolute;
+      width: 130px;
+      height: 130px;
+      border-radius: 999px;
+      background: conic-gradient(from 130deg, rgba(56,189,248,0) 0deg, rgba(56,189,248,0.8) 90deg, rgba(99,102,241,0.7) 180deg, rgba(56,189,248,0) 360deg);
+      filter: drop-shadow(0 0 16px rgba(56,189,248,0.4));
+      animation: spin 8s linear infinite;
+      opacity: 0.7;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
     }
 
     .avatar {
       width: 110px;
       height: 110px;
-      border-radius: 9999px;
-      background: linear-gradient(120deg, #38bdf8 0%, #6366f1 100%);
-      margin: 0 auto 16px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0f172a 60%);
       display: grid;
       place-items: center;
-      font-size: 42px;
+      font-size: 46px;
       font-weight: 700;
       color: #0f172a;
-      border: 3px solid rgba(226, 232, 240, 0.3);
+      border: 3px solid rgba(226,232,240,0.3);
+      position: relative;
+      z-index: 2;
     }
 
     .nickname {
-      font-size: 1.4rem;
+      font-size: 1.5rem;
       font-weight: 700;
-      letter-spacing: 0.01em;
+      text-align: center;
     }
 
     .tagline {
-      font-size: 0.8rem;
+      text-align: center;
       color: var(--muted);
-      margin-top: 4px;
+      font-size: 0.8rem;
+      margin-top: 2px;
     }
 
     .short-bio {
-      margin-top: 14px;
-      font-size: 0.82rem;
-      line-height: 1.4;
-      color: #cbd5f5;
+      margin-top: 16px;
+      font-size: 0.78rem;
+      line-height: 1.5;
+      text-align: center;
+      color: #dbeafe;
     }
 
-    .tags {
+    .tags-row {
+      margin-top: 18px;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
-      margin-top: 16px;
       justify-content: center;
     }
 
-    .tag {
-      background: rgba(3, 105, 161, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.22);
+    .tag-pill {
+      background: rgba(2,6,23,0.4);
+      border: 1px solid rgba(56,189,248,0.3);
       border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 0.7rem;
-      color: #e2e8f0;
-      display: flex;
+      padding: 4px 10px 3px;
+      font-size: 0.68rem;
+      display: inline-flex;
       align-items: center;
       gap: 4px;
+      transition: transform .15s ease;
     }
 
-    /* RIGHT: expandable sections */
+    .tag-pill:hover {
+      transform: translateY(-2px);
+    }
+
+    .links-bottom {
+      margin-top: 18px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .gh-btn {
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(248, 186, 98, 0.2);
+      border-radius: 999px;
+      padding: 6px 15px;
+      font-size: 0.71rem;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: 0.15s ease;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .gh-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(248,186,98,0.05);
+    }
+
+    /* RIGHT COLUMN */
     .sections {
       display: flex;
       flex-direction: column;
@@ -116,171 +219,185 @@
     }
 
     .section {
-      background: rgba(2, 6, 23, 0.35);
-      border: 1px solid rgba(148, 163, 184, 0.12);
-      border-radius: var(--radius);
+      background: rgba(2, 6, 23, 0.55);
+      border: 1px solid rgba(148,163,184,0.04);
+      border-radius: 18px;
       overflow: hidden;
       backdrop-filter: blur(10px);
-      transition: transform var(--duration) ease;
-    }
-
-    .section:hover {
-      transform: translateY(-2px);
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 14px 16px 14px 16px;
-      cursor: pointer;
+      transition: border 0.2s ease, box-shadow 0.2s ease;
       position: relative;
+      isolation: isolate;
     }
 
-    .section-header::after {
+    .section::after {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(56,189,248,0.1) 0%, transparent 50%);
+      background: radial-gradient(circle at 0 0, rgba(56,189,248,0.08), transparent 55%);
       opacity: 0;
       transition: opacity 0.15s ease;
       pointer-events: none;
     }
 
-    .section-header:hover::after {
+    .section:hover {
+      border: 1px solid rgba(56,189,248,0.25);
+      box-shadow: 0 10px 30px rgba(3,105,161,0.1);
+    }
+    .section:hover::after {
       opacity: 1;
     }
 
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px 14px 16px;
+      cursor: pointer;
+    }
+
     .icon-badge {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: rgba(15, 23, 42, 0.5);
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: radial-gradient(circle, rgba(15,23,42,1) 0%, rgba(15,23,42,0) 100%);
+      border: 1px solid rgba(148,163,184,0.08);
       display: grid;
       place-items: center;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
     }
 
     .section-title {
       font-weight: 600;
+      letter-spacing: 0.01em;
     }
 
     .section-sub {
-      font-size: 0.65rem;
+      font-size: 0.66rem;
       color: var(--muted);
+      margin-top: 1px;
     }
 
     .chevron {
       margin-left: auto;
       width: 20px;
       height: 20px;
-      transition: transform var(--duration) ease;
+      transition: transform var(--dur) ease;
       opacity: 0.8;
     }
 
     .section-content {
       max-height: 0;
       overflow: hidden;
-      transition: max-height var(--duration) ease;
-      background: rgba(15, 23, 42, 0.08);
+      background: radial-gradient(circle at top, rgba(15,23,42,0.35) 0%, rgba(15,23,42,0.1) 100%);
+      transition: max-height 0.28s ease-out, opacity 0.28s ease-out;
+      opacity: 0;
     }
 
-    .section.active .section-content {
-      max-height: 220px; /* enough for a few items */
-    }
-
-    .section.active .chevron {
-      transform: rotate(180deg);
+    .section.open .section-content {
+      opacity: 1;
     }
 
     .list {
-      padding: 10px 16px 14px 58px;
+      padding: 10px 16px 16px 70px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 9px;
     }
 
     .list-item {
       background: rgba(15, 23, 42, 0.35);
-      border: 1px solid rgba(148, 163, 184, 0.08);
-      border-radius: 12px;
-      padding: 7px 10px;
+      border: 1px solid rgba(148, 163, 184, 0.06);
+      border-radius: 14px;
+      padding: 6px 12px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 8px;
       font-size: 0.78rem;
+      transform: translateY(6px);
+      opacity: 0;
+      animation: slideIn 0.25s ease forwards;
+    }
+
+    @keyframes slideIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
     }
 
     .list-item span.label {
       color: #e2e8f0;
       font-weight: 500;
     }
-
     .list-item span.value {
       color: #bae6fd;
-      font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.72rem;
-    }
-
-    .badge-small {
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid rgba(125, 211, 252, 0.2);
-      padding: 2px 6px 1px;
-      border-radius: 999px;
-      font-size: 0.6rem;
-      color: #e2e8f0;
-    }
-
-    .github-link {
-      margin-top: 18px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(15, 23, 42, 0.45);
-      border: 1px solid rgba(148, 163, 184, 0.15);
-      border-radius: 999px;
-      padding: 6px 14px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       font-size: 0.7rem;
-      text-decoration: none;
-      color: #e2e8f0;
-      transition: transform 0.15s ease;
+      letter-spacing: 0.03em;
     }
 
-    .github-link:hover {
-      transform: translateY(-2px);
+    /* small tag in list */
+    .small-tag {
+      background: rgba(56,189,248,0.2);
+      border: 1px solid rgba(125,211,252,0.2);
+      border-radius: 999px;
+      font-size: 0.58rem;
+      padding: 2px 7px 1px;
+    }
+
+    .section.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    @media (max-width: 480px) {
+      .list {
+        padding-left: 16px;
+      }
+      .section-header {
+        gap: 10px;
+      }
+      .icon-badge {
+        width: 34px;
+        height: 34px;
+      }
     }
   </style>
 </head>
 <body>
   <main class="wrapper">
-    <!-- LEFT COLUMN -->
+    <!-- LEWY PANEL -->
     <section class="profile-card">
-      <div class="avatar" aria-label="Avatar">
-        <!-- możesz tu wsadzić inicjały albo 🌀 -->
-        🌀
+      <div class="avatar-wrap">
+        <div class="avatar-ring" aria-hidden="true"></div>
+        <div class="avatar">🌀</div>
       </div>
       <div class="nickname">TwojaKsywa</div>
       <div class="tagline">gaming • social • creator</div>
       <p class="short-bio">
-        Hej! Tu moje dane do gier i platform – klikaj w sekcje po prawej, żeby rozwinąć listy.
+        Całe moje dane do gier i platform. Klikaj po prawej – każdy blok się rozsuwa z animką ✨
       </p>
-      <div class="tags">
-        <span class="tag">🎮 Roblox</span>
-        <span class="tag">⚔ Riot</span>
-        <span class="tag">💬 Discord</span>
-        <span class="tag">🎧 Spotify</span>
+      <div class="tags-row">
+        <span class="tag-pill">🎮 Roblox</span>
+        <span class="tag-pill">🗡 Riot</span>
+        <span class="tag-pill">💬 Discord</span>
+        <span class="tag-pill">🕹 Epic</span>
+        <span class="tag-pill">🎧 Spotify</span>
       </div>
-      <a class="github-link" href="#" target="_blank" rel="noreferrer">
-        <span>🐱 GitHub</span>
-        <span class="badge-small">to jest GitHub!!</span>
-      </a>
+      <div class="links-bottom">
+        <a href="#" class="gh-btn" target="_blank" rel="noreferrer">
+          🐱 GitHub
+        </a>
+        <a href="#" class="gh-btn" target="_blank" rel="noreferrer">
+          😼 to jest GitHub!!
+        </a>
+      </div>
     </section>
 
-    <!-- RIGHT COLUMN -->
-    <section class="sections">
+    <!-- PRAWA STRONA -->
+    <section class="sections" id="sections">
       <!-- ROBLOX -->
-      <article class="section">
+      <article class="section" data-name="roblox">
         <header class="section-header">
           <div class="icon-badge">🧱</div>
           <div>
@@ -301,17 +418,21 @@
               <span class="label">Profil</span>
               <span class="value">roblox.com/users/123456</span>
             </div>
+            <div class="list-item">
+              <span class="label">Grupa / clan</span>
+              <span class="value">MyCoolGroup</span>
+            </div>
           </div>
         </div>
       </article>
 
       <!-- RIOT -->
-      <article class="section">
+      <article class="section" data-name="riot">
         <header class="section-header">
           <div class="icon-badge">⚔</div>
           <div>
             <div class="section-title">Riot Games</div>
-            <div class="section-sub">LoL / VAL / TFT</div>
+            <div class="section-sub">LoL / VALORANT / TFT</div>
           </div>
           <svg class="chevron" viewBox="0 0 24 24">
             <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
@@ -321,18 +442,22 @@
           <div class="list">
             <div class="list-item">
               <span class="label">Riot ID</span>
-              <span class="value">Nick#EUW</span>
+              <span class="value">TwojNick#EUW</span>
             </div>
             <div class="list-item">
               <span class="label">Valorant</span>
-              <span class="value">YourValo#123</span>
+              <span class="value">Volt#777</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Region</span>
+              <span class="small-tag">EUROPE</span>
             </div>
           </div>
         </div>
       </article>
 
       <!-- DISCORD -->
-      <article class="section">
+      <article class="section" data-name="discord">
         <header class="section-header">
           <div class="icon-badge">💬</div>
           <div>
@@ -351,14 +476,18 @@
             </div>
             <div class="list-item">
               <span class="label">Serwer</span>
-              <span class="value">discord.gg/yourlink</span>
+              <span class="value">discord.gg/yourserver</span>
+            </div>
+            <div class="list-item">
+              <span class="label">Rola</span>
+              <span class="small-tag">Owner</span>
             </div>
           </div>
         </div>
       </article>
 
-      <!-- EPIC GAMES -->
-      <article class="section">
+      <!-- EPIC -->
+      <article class="section" data-name="epic">
         <header class="section-header">
           <div class="icon-badge">🕹</div>
           <div>
@@ -375,17 +504,21 @@
               <span class="label">Nick Fortnite</span>
               <span class="value">YourFNname</span>
             </div>
+            <div class="list-item">
+              <span class="label">Epic ID</span>
+              <span class="value">your-epic-id</span>
+            </div>
           </div>
         </div>
       </article>
 
       <!-- SPOTIFY -->
-      <article class="section">
+      <article class="section" data-name="spotify">
         <header class="section-header">
           <div class="icon-badge">🎧</div>
           <div>
             <div class="section-title">Spotify</div>
-            <div class="section-sub">playlist / profil</div>
+            <div class="section-sub">profil / playlista</div>
           </div>
           <svg class="chevron" viewBox="0 0 24 24">
             <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
@@ -399,14 +532,14 @@
             </div>
             <div class="list-item">
               <span class="label">Ulubiona playlista</span>
-              <span class="value">open.spotify.com/playlist/xyz</span>
+              <span class="value">open.spotify.com/playlist/123</span>
             </div>
           </div>
         </div>
       </article>
 
       <!-- GITHUB -->
-      <article class="section">
+      <article class="section" data-name="github">
         <header class="section-header">
           <div class="icon-badge">🐱</div>
           <div>
@@ -430,19 +563,48 @@
           </div>
         </div>
       </article>
-
     </section>
   </main>
 
   <script>
-    // simple accordion logic
+    // accordion with dynamic height + staggered list animation
     const sections = document.querySelectorAll('.section');
+
     sections.forEach(section => {
       const header = section.querySelector('.section-header');
+      const content = section.querySelector('.section-content');
+
       header.addEventListener('click', () => {
-        // if you want only one open at a time, uncomment below:
-        // sections.forEach(s => { if (s !== section) s.classList.remove('active'); });
-        section.classList.toggle('active');
+        const isOpen = section.classList.contains('open');
+
+        // jeśli chcesz zamykać pozostałe, odkomentuj:
+        // sections.forEach(s => {
+        //   if (s !== section) {
+        //     s.classList.remove('open');
+        //     s.querySelector('.section-content').style.maxHeight = 0;
+        //   }
+        // });
+
+        if (!isOpen) {
+          section.classList.add('open');
+          content.style.maxHeight = content.scrollHeight + 'px';
+
+          // animacja pojawiania się pozycji lista
+          const items = content.querySelectorAll('.list-item');
+          items.forEach((item, idx) => {
+            item.style.animationDelay = (idx * 0.06) + 's';
+          });
+        } else {
+          section.classList.remove('open');
+          content.style.maxHeight = 0;
+        }
+      });
+
+      // na wypadek resize
+      window.addEventListener('resize', () => {
+        if (section.classList.contains('open')) {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
       });
     });
   </script>
