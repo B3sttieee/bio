@@ -3,14 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>red bio</title>
+  <title>Moje BIO / Gaming</title>
   <style>
     :root {
-      --red: #ff1a1a;
-      --red-soft: rgba(255, 26, 26, 0.16);
-      --bg-dark: rgba(0, 0, 0, 0.35);
-      --text: #fef2f2;
-      --muted: rgba(254, 242, 242, 0.6);
+      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #000 100%);
+      --card: rgba(2, 6, 23, 0.55);
+      --card-border: rgba(148, 163, 184, 0.12);
+      --accent: #38bdf8;
+      --accent-soft: rgba(56, 189, 248, 0.08);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --radius: 16px;
+      --dur: 0.25s;
     }
 
     * {
@@ -20,272 +24,448 @@
     body {
       margin: 0;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-      /* PODMIEN TUTAJ na swój kadr / gif / obraz */
-      background-image: url("https://images.unsplash.com/photo-1668951801992-e40cac7b6990?auto=format&fit=crop&w=1800&q=70");
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      position: relative;
+      background: var(--bg);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      overflow: hidden;
-      padding: 18px;
+      display: flex;
+      justify-content: center;
+      padding: 26px 14px 40px;
     }
 
-    /* lekki mrok na całość */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 70%);
-      pointer-events: none;
-    }
-
-    .center-bio {
-      position: relative;
-      z-index: 5;
-      width: min(520px, 100%);
+    .page {
+      width: min(1100px, 100%);
       display: flex;
       flex-direction: column;
-      align-items: center;
-      gap: 14px;
-      text-align: center;
+      gap: 18px;
     }
 
-    /* avatar */
-    .avatar-wrap {
-      width: 118px;
-      height: 118px;
-      border-radius: 999px;
-      background: rgba(0,0,0,0.5);
-      border: 3px solid rgba(255, 26, 26, 0.8);
-      overflow: hidden;
+    /* top bar */
+    .top-bar {
+      background: rgba(15, 23, 42, 0.35);
+      border: 1px solid rgba(148, 163, 184, 0.09);
+      border-radius: 20px;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      backdrop-filter: blur(12px);
+    }
+
+    .avatar {
+      width: 62px;
+      height: 62px;
+      border-radius: 9999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0f172a 70%);
       display: grid;
       place-items: center;
-      box-shadow: 0 12px 28px rgba(0,0,0,0.45);
-    }
-
-    .avatar-wrap img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .nick {
-      font-size: 2rem;
+      font-size: 28px;
       font-weight: 700;
-      letter-spacing: 0.12rem;
-      color: var(--red);
-      text-transform: uppercase;
-      text-shadow: 0 3px 10px rgba(0,0,0,0.7);
-    }
-
-    .icons-row {
-      display: flex;
-      gap: 6px;
-      font-size: 1.05rem;
-      color: var(--red);
-      justify-content: center;
-    }
-
-    .small-text {
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.25rem;
-      text-transform: uppercase;
-    }
-
-    .location {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.7rem;
-      color: var(--text);
-      text-shadow: 0 1px 5px rgba(0,0,0,0.5);
-    }
-
-    /* glass card */
-    .glass-card {
-      width: min(490px, 100%);
-      background: rgba(10, 10, 10, 0.28);
-      border: 1px solid rgba(255, 26, 26, 0.14);
-      border-radius: 26px;
-      backdrop-filter: blur(14px);
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 10px 16px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
-    }
-
-    .glass-avatar {
-      width: 52px;
-      height: 52px;
-      border-radius: 999px;
-      overflow: hidden;
-      border: 2px solid rgba(255, 26, 26, 0.5);
+      border: 2px solid rgba(226, 232, 240, 0.5);
+      box-shadow: 0 10px 25px rgba(56,189,248,0.35);
       flex: 0 0 auto;
     }
 
-    .glass-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .glass-info {
-      text-align: left;
+    .top-info {
       flex: 1;
     }
 
-    .glass-title {
-      font-weight: 600;
-      color: var(--text);
-      font-size: 0.8rem;
+    .name {
+      font-weight: 650;
+      font-size: 1.1rem;
     }
 
-    .glass-sub {
-      font-size: 0.6rem;
+    .desc {
+      font-size: 0.72rem;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.02rem;
-    }
-
-    .status-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 999px;
-      background: #22c55e;
-      display: inline-block;
-      margin-right: 6px;
-    }
-
-    .last-row {
       margin-top: 3px;
-      font-size: 0.6rem;
-      color: rgba(255, 26, 26, 0.85);
     }
 
-    /* social icons bottom */
-    .social-bar {
-      margin-top: 4px;
+    .chips {
       display: flex;
-      gap: 14px;
-      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .chip {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(148, 163, 184, 0.1);
+      border-radius: 999px;
+      padding: 3px 9px 2px;
+      font-size: 0.65rem;
+      display: flex;
+      gap: 4px;
       align-items: center;
     }
 
-    .social-btn {
-      width: 32px;
-      height: 32px;
+    .top-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .btn-gh {
+      background: rgba(2,6,23,0.6);
+      border: 1px solid rgba(248, 186, 98, 0.2);
       border-radius: 999px;
-      border: 1px solid rgba(255, 26, 26, 0.3);
-      background: rgba(0,0,0,0.35);
+      padding: 5px 14px;
+      font-size: 0.68rem;
+      text-decoration: none;
+      color: var(--text);
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      transition: transform .12s ease;
+    }
+
+    .btn-gh:hover {
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 660px) {
+      .top-bar {
+        flex-wrap: wrap;
+      }
+      .top-actions {
+        flex-direction: row;
+      }
+    }
+
+    /* grid of cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .card {
+      background: rgba(2,6,23,0.35);
+      border: 1px solid rgba(148, 163, 184, 0.07);
+      border-radius: 16px;
+      padding: 14px 14px 14px;
+      position: relative;
+      min-height: 110px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border 0.15s ease, transform 0.15s ease;
+    }
+
+    .card:hover {
+      border: 1px solid rgba(56, 189, 248, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-badge {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.7);
       display: grid;
       place-items: center;
-      font-size: 0.85rem;
-      color: var(--text);
-      cursor: pointer;
-      transition: transform 0.12s ease;
+      font-size: 1.15rem;
+      flex: 0 0 auto;
     }
 
-    .social-btn:hover {
-      transform: translateY(-2px);
-      background: rgba(255, 26, 26, 0.33);
+    .card-title {
+      font-weight: 600;
     }
 
-    .footer-line {
-      margin-top: 6px;
-      font-size: 0.6rem;
-      color: rgba(255, 26, 26, 0.8);
+    .card-sub {
+      font-size: 0.65rem;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .chevron {
+      margin-left: auto;
+      width: 16px;
+      height: 16px;
+      opacity: 0.7;
+      transition: transform var(--dur) ease;
+    }
+
+    /* floating data panel inside card */
+    .data-panel {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 14px;
+      padding: 6px 10px 8px;
       display: flex;
+      flex-direction: column;
+      gap: 5px;
+      box-shadow: 0 16px 30px rgba(0,0,0,0.35);
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px) scale(.99);
+      filter: blur(2px);
+      transition: opacity var(--dur) ease, transform var(--dur) ease, filter var(--dur) ease;
+    }
+
+    .card.open .data-panel {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+      filter: blur(0);
+    }
+
+    .card.open .chevron {
+      transform: rotate(180deg);
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
       gap: 6px;
-      align-items: center;
+      background: rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      border-radius: 10px;
+      padding: 3px 6px 3px 8px;
+      font-size: 0.68rem;
     }
 
-    .dot {
-      width: 4px;
-      height: 4px;
+    .data-label {
+      color: #e2e8f0;
+      font-weight: 500;
+    }
+
+    .data-value {
+      color: #bae6fd;
+      font-family: ui-monospace, SFMono-Regular, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.63rem;
+      max-width: 120px;
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .badge-small {
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(125, 211, 252, 0.2);
       border-radius: 999px;
-      background: rgba(255,255,255,0.55);
+      padding: 1px 6px 0;
+      font-size: 0.55rem;
+      display: inline-block;
+      margin-top: 4px;
+      width: fit-content;
     }
 
-    @media (max-width: 520px) {
-      .glass-card {
-        gap: 10px;
-      }
-      .nick {
-        font-size: 1.6rem;
-      }
-      .center-bio {
-        gap: 12px;
-      }
-      .social-bar {
-        gap: 10px;
-      }
+    /* to keep card height stable */
+    .spacer {
+      height: 38px;
     }
   </style>
 </head>
 <body>
-  <main class="center-bio">
-    <!-- avatar -->
-    <div class="avatar-wrap">
-      <!-- podmień src na swój avatar -->
-      <img src="https://i.imgur.com/0Zf7K8k.jpeg" alt="avatar">
-    </div>
-
-    <!-- nick -->
-    <div class="nick">D3ATH</div>
-
-    <!-- ozdobne ikonki -->
-    <div class="icons-row">
-      <span>✖</span>
-      <span>❤</span>
-      <span>★</span>
-      <span>♞</span>
-      <span>♠</span>
-    </div>
-
-    <!-- opis -->
-    <div class="small-text">MY DATA</div>
-    <div class="location">📍 BALTIMORE</div>
-
-    <!-- mała szklana karta jak z ss -->
-    <div class="glass-card">
-      <div class="glass-avatar">
-        <img src="https://i.imgur.com/0Zf7K8k.jpeg" alt="pfp">
+  <div class="page">
+    <!-- TOP -->
+    <header class="top-bar">
+      <div class="avatar">S</div>
+      <div class="top-info">
+        <div class="name">TwojaKsywa</div>
+        <div class="desc">Dane do gier i platform. Kliknij w kafel, żeby zobaczyć nicki.</div>
+        <div class="chips">
+          <div class="chip">🎮 Roblox</div>
+          <div class="chip">🗡 Riot</div>
+          <div class="chip">💬 Discord</div>
+          <div class="chip">🕹 Epic</div>
+          <div class="chip">🎧 Spotify</div>
+        </div>
       </div>
-      <div class="glass-info">
-        <div class="glass-title">FOREIGNSLUTZ <span style="color:#38bdf8;">✔</span></div>
-        <div class="glass-sub"><span class="status-dot"></span>currently doing nothing</div>
-        <div class="last-row">view below everything ↓</div>
+      <div class="top-actions">
+        <a class="btn-gh" href="#" target="_blank" rel="noreferrer">🐱 GitHub</a>
+        <a class="btn-gh" href="#" target="_blank" rel="noreferrer">😼 to jest GitHub!!</a>
       </div>
-      <div style="font-size:1.2rem;color:var(--red);">●</div>
-    </div>
+    </header>
 
-    <!-- ikony platform (tu wstaw swoje: roblox, riot, discord itd) -->
-    <div class="social-bar">
+    <!-- GRID -->
+    <section class="grid" id="grid">
       <!-- Roblox -->
-      <div class="social-btn" title="Roblox">🧱</div>
-      <!-- Riot -->
-      <div class="social-btn" title="Riot">⚔</div>
-      <!-- Discord -->
-      <div class="social-btn" title="Discord">💬</div>
-      <!-- Epic -->
-      <div class="social-btn" title="Epic Games">🕹</div>
-      <!-- Spotify -->
-      <div class="social-btn" title="Spotify">🎧</div>
-      <!-- GitHub -->
-      <div class="social-btn" title="GitHub">🐱</div>
-    </div>
+      <article class="card" data-service="roblox">
+        <div class="card-header">
+          <div class="icon-badge">🧱</div>
+          <div>
+            <div class="card-title">Roblox</div>
+            <div class="card-sub">nick / profil</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Nick</span>
+            <span class="data-value">YourRobloxName</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Profil</span>
+            <span class="data-value">roblox.com/users/123456</span>
+          </div>
+        </div>
+      </article>
 
-    <div class="footer-line">
-      👁 7,928 <span class="dot"></span> everywhere
-    </div>
-  </main>
+      <!-- Riot -->
+      <article class="card" data-service="riot">
+        <div class="card-header">
+          <div class="icon-badge">⚔</div>
+          <div>
+            <div class="card-title">Riot Games</div>
+            <div class="card-sub">LoL / VAL / TFT</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Riot ID</span>
+            <span class="data-value">Nick#EUW</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Valorant</span>
+            <span class="data-value">YourValo#777</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Discord -->
+      <article class="card" data-service="discord">
+        <div class="card-header">
+          <div class="icon-badge">💬</div>
+          <div>
+            <div class="card-title">Discord</div>
+            <div class="card-sub">kontakt / serwer</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Discord</span>
+            <span class="data-value">@yourdiscord</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Serwer</span>
+            <span class="data-value">discord.gg/yourserver</span>
+          </div>
+          <span class="badge-small">Owner</span>
+        </div>
+      </article>
+
+      <!-- Epic -->
+      <article class="card" data-service="epic">
+        <div class="card-header">
+          <div class="icon-badge">🕹</div>
+          <div>
+            <div class="card-title">Epic Games</div>
+            <div class="card-sub">Fortnite / EG</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Nick Fortnite</span>
+            <span class="data-value">YourFNname</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Epic ID</span>
+            <span class="data-value">your-epic-id</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Spotify -->
+      <article class="card" data-service="spotify">
+        <div class="card-header">
+          <div class="icon-badge">🎧</div>
+          <div>
+            <div class="card-title">Spotify</div>
+            <div class="card-sub">profil / playlista</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Profil</span>
+            <span class="data-value">open.spotify.com/user/yourid</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Playlista</span>
+            <span class="data-value">open.spotify.com/playlist/xyz</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- GitHub -->
+      <article class="card" data-service="github">
+        <div class="card-header">
+          <div class="icon-badge">🐱</div>
+          <div>
+            <div class="card-title">GitHub</div>
+            <div class="card-sub">to jest GitHub!!</div>
+          </div>
+          <svg class="chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
+        </div>
+        <div class="spacer"></div>
+        <div class="data-panel">
+          <div class="data-row">
+            <span class="data-label">Account</span>
+            <span class="data-value">github.com/yourname</span>
+          </div>
+          <div class="data-row">
+            <span class="data-label">Repo</span>
+            <span class="data-value">github.com/yourname/bio</span>
+          </div>
+        </div>
+      </article>
+    </section>
+  </div>
+
+  <script>
+    // open/close card panel
+    const cards = document.querySelectorAll('.card');
+
+    cards.forEach(card => {
+      card.addEventListener('click', (e) => {
+        // żeby kliknięcie w panel nie zamykało od razu – opcjonalnie można sprawdzić target
+        const isOpen = card.classList.contains('open');
+
+        // jeśli ma być tylko jedna otwarta naraz
+        cards.forEach(c => c.classList.remove('open'));
+
+        if (!isOpen) {
+          card.classList.add('open');
+        }
+      });
+    });
+
+    // klik poza kartą zamyka
+    document.addEventListener('click', (e) => {
+      const clickedInside = e.target.closest('.card');
+      if (!clickedInside) {
+        cards.forEach(c => c.classList.remove('open'));
+      }
+    });
+  </script>
 </body>
 </html>
