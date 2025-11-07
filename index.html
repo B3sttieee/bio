@@ -3,18 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Bio / Platformy</title>
+  <title>My Gaming / Social Bio</title>
   <style>
     :root {
-      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 60%, #000 100%);
-      --surface: rgba(2, 6, 23, 0.35);
-      --surface-solid: rgba(2, 6, 23, 0.95);
-      --border: rgba(148, 163, 184, 0.12);
+      --bg1: #020617;
+      --bg2: #0f172a;
+      --glass: rgba(2,6,23,0.35);
+      --panel: rgba(2,6,23,0.85);
+      --border: rgba(148,163,184,0.22);
       --accent: #38bdf8;
+      --accent2: #f97316;
       --text: #e2e8f0;
       --muted: #94a3b8;
-      --radius: 14px;
-      --dur: 0.22s;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --dur: 0.28s;
     }
 
     * {
@@ -24,396 +27,533 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      background: radial-gradient(circle at top, #172554 0%, #020617 45%, #000 90%);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 30px 16px 50px;
+      align-items: center;
+      padding: 18px 16px 130px;
+      position: relative;
+      overflow: hidden;
     }
 
-    .page {
-      width: min(960px, 100%);
+    /* animated gradient blob background */
+    .bg-blob {
+      position: fixed;
+      width: 1100px;
+      height: 1100px;
+      background: radial-gradient(circle, rgba(56,189,248,0.17) 0%, rgba(15,23,42,0) 55%);
+      filter: blur(18px);
+      top: -250px;
+      left: 50%;
+      transform: translateX(-50%);
+      pointer-events: none;
+      animation: drift 12s ease-in-out infinite;
+      opacity: 0.9;
+    }
+    .bg-blob.two {
+      top: auto;
+      bottom: -600px;
+      width: 900px;
+      background: radial-gradient(circle, rgba(249,115,22,0.12) 0%, rgba(15,23,42,0) 65%);
+      animation-delay: 2s;
+    }
+
+    @keyframes drift {
+      0%, 100% { transform: translate(-50%, -10px) scale(1); }
+      50% { transform: translate(-52%, 20px) scale(1.05); }
+    }
+
+    /* floating particles */
+    .particle {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(226,232,240,0.09);
+      animation: floatUp 16s linear infinite;
+      pointer-events: none;
+    }
+    .particle.p1 { left: 10%; bottom: -30px; animation-duration: 13s; }
+    .particle.p2 { left: 30%; bottom: -30px; animation-duration: 19s; }
+    .particle.p3 { left: 70%; bottom: -30px; animation-duration: 17s; }
+    .particle.p4 { left: 90%; bottom: -30px; animation-duration: 21s; }
+
+    @keyframes floatUp {
+      0% { transform: translateY(0); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0; }
+      100% { transform: translateY(-110vh); }
+    }
+
+    .scene {
+      width: min(1200px, 100%);
+      position: relative;
+      z-index: 5;
       display: flex;
       flex-direction: column;
-      gap: 26px;
       align-items: center;
+      gap: 26px;
     }
 
-    /* HEADER CENTER */
-    .header {
+    /* TOP HERO */
+    .hero {
       text-align: center;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       align-items: center;
     }
 
+    .avatar-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+    }
+    .avatar-ring {
+      position: absolute;
+      inset: -11px;
+      border-radius: 999px;
+      background: conic-gradient(from 170deg, rgba(56,189,248,0.1), rgba(56,189,248,1), rgba(99,102,241,0.2), rgba(2,6,23,0));
+      filter: drop-shadow(0 0 12px rgba(56,189,248,0.4));
+      animation: spin 10s linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
     .avatar {
-      width: 72px;
-      height: 72px;
-      border-radius: 9999px;
-      background: radial-gradient(circle at 20% 20%, #38bdf8 0%, #0f172a 80%);
-      border: 2px solid rgba(226,232,240,0.45);
+      position: relative;
+      width: 120px;
+      height: 120px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 70%);
+      border: 3px solid rgba(226,232,240,0.6);
       display: grid;
       place-items: center;
-      font-size: 30px;
+      font-size: 52px;
       font-weight: 700;
-      box-shadow: 0 15px 35px rgba(56,189,248,0.35);
+      color: #020617;
+      box-shadow: 0 20px 50px rgba(56,189,248,0.3);
     }
 
-    .name {
-      font-weight: 650;
-      font-size: 1.1rem;
+    .hero-title {
+      font-size: clamp(1.7rem, 3.2vw, 2.1rem);
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .hero-sub {
+      max-width: 430px;
+      color: rgba(226,232,240,0.7);
+      font-size: 0.8rem;
     }
 
-    .subtitle {
-      font-size: 0.72rem;
-      color: var(--muted);
-      max-width: 420px;
-    }
-
-    .links {
+    .hero-buttons {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       justify-content: center;
     }
-
-    .link-btn {
-      background: rgba(15,23,42,0.35);
-      border: 1px solid rgba(148,163,184,0.1);
+    .hero-btn {
+      background: rgba(2,6,23,0.1);
+      border: 1px solid rgba(248, 186, 98, 0.35);
       border-radius: 999px;
       padding: 5px 14px;
-      font-size: 0.68rem;
-      display: inline-flex;
-      gap: 5px;
-      align-items: center;
+      font-size: 0.7rem;
       text-decoration: none;
       color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
       transition: transform .12s;
     }
+    .hero-btn:hover { transform: translateY(-2px); }
 
-    .link-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    /* GRID */
-    .grid {
+    /* GRID OF CARDS 3D */
+    .cards {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 14px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
       width: 100%;
+      perspective: 1200px;
     }
 
-    .pill {
-      background: rgba(2,6,23,0.35);
-      border: 1px solid rgba(148,163,184,0.07);
-      border-radius: 14px;
-      padding: 12px 12px 36px;
+    .card {
+      background: linear-gradient(140deg, rgba(2,6,23,0.85) 0%, rgba(2,6,23,0.15) 100%);
+      border: 1px solid rgba(148,163,184,0.08);
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      min-height: 120px;
       position: relative;
-      overflow: visible;
+      overflow: hidden;
       cursor: pointer;
+      transform-style: preserve-3d;
+      transition: transform 0.2s ease, border 0.2s ease;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      inset: -20% 5%;
+      height: 40%;
+      background: radial-gradient(circle, rgba(248, 250, 252,0.15) 0%, transparent 70%);
+      transform: rotate(-9deg);
+      pointer-events: none;
+    }
+
+    .card:hover {
+      transform: translateY(-4px) rotateX(2deg);
+      border: 1px solid rgba(56,189,248,0.4);
+    }
+
+    .card-top {
       display: flex;
       gap: 10px;
       align-items: center;
-      transition: background .12s ease, transform .12s ease;
-      min-height: 78px;
+      position: relative;
+      z-index: 2;
     }
 
-    .pill:hover {
-      background: rgba(2,6,23,0.55);
-      transform: translateY(-1px);
-    }
-
-    .icon {
-      width: 33px;
-      height: 33px;
-      border-radius: 12px;
-      background: rgba(15,23,42,0.6);
+    .card-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.85);
       display: grid;
       place-items: center;
       font-size: 1.1rem;
       flex: 0 0 auto;
     }
 
-    .pill-body {
-      display: flex;
-      flex-direction: column;
-      gap: 3px;
-    }
-
-    .title {
+    .card-title {
       font-weight: 600;
-      font-size: 0.78rem;
+    }
+    .card-sub {
+      font-size: 0.65rem;
+      color: rgba(226,232,240,0.5);
     }
 
-    .desc {
-      font-size: 0.62rem;
-      color: var(--muted);
-    }
-
-    .chev {
+    .card-chevron {
       margin-left: auto;
       width: 16px;
       height: 16px;
       opacity: 0.7;
-      transition: transform var(--dur);
     }
 
-    /* POPOVER */
-    .popover {
-      position: absolute;
+    .card-bottom {
+      margin-top: 16px;
+      font-size: 0.63rem;
+      color: rgba(226,232,240,0.5);
+    }
+
+    /* DETAIL PANEL (bottom) */
+    .detail-panel {
+      position: fixed;
       left: 50%;
-      bottom: 6px;
-      transform: translate(-50%, 105%);
-      background: radial-gradient(circle at top, rgba(2,6,23,1) 0%, rgba(2,6,23,0.75) 80%);
-      border: 1px solid rgba(148,163,184,0.15);
-      border-radius: 14px;
-      padding: 9px 10px 9px;
+      bottom: 20px;
+      transform: translate(-50%, 140%);
+      width: min(480px, 100% - 24px);
+      background: rgba(2,6,23,0.85);
+      border: 1px solid rgba(148,163,184,0.25);
+      border-radius: 18px;
+      backdrop-filter: blur(18px);
+      box-shadow: 0 20px 70px rgba(0,0,0,0.35);
+      padding: 14px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 50;
+      transition: transform 0.25s ease;
+    }
+
+    .detail-panel.show {
+      transform: translate(-50%, 0);
+    }
+
+    .detail-header {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .detail-title {
+      font-weight: 600;
+    }
+    .detail-sub {
+      font-size: 0.67rem;
+      color: rgba(226,232,240,0.45);
+    }
+    .detail-close {
+      margin-left: auto;
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(248,113,113,0.25);
+      border-radius: 999px;
+      padding: 2px 10px 1px;
+      font-size: 0.58rem;
+      cursor: pointer;
+    }
+
+    .detail-list {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      min-width: 185px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.35);
-      opacity: 0;
-      pointer-events: none;
-      filter: blur(3px);
-      transition: opacity var(--dur) ease, filter var(--dur) ease, transform var(--dur) ease;
-      z-index: 20;
+      margin-top: 4px;
     }
-
-    .pill.open .popover {
-      opacity: 1;
-      pointer-events: auto;
-      filter: blur(0);
-      transform: translate(-50%, 98%);
-    }
-
-    .pill.open .chev {
-      transform: rotate(180deg);
-    }
-
-    .pop-row {
-      background: rgba(15,23,42,0.15);
-      border: 1px solid rgba(148,163,184,0.07);
-      border-radius: 10px;
-      padding: 4px 6px 4px 7px;
+    .detail-row {
+      background: rgba(15,23,42,0.35);
+      border: 1px solid rgba(148,163,184,0.12);
+      border-radius: 12px;
+      padding: 5px 8px 5px 6px;
       display: flex;
       justify-content: space-between;
-      gap: 6px;
-      font-size: 0.66rem;
+      gap: 8px;
+      font-size: 0.68rem;
     }
-
-    .pop-label {
-      font-weight: 500;
-      color: #e2e8f0;
+    .detail-label {
+      color: rgba(226,232,240,0.72);
     }
-    .pop-value {
+    .detail-value {
       color: #bae6fd;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.64rem;
-      max-width: 110px;
+      font-size: 0.65rem;
       text-align: right;
+      max-width: 230px;
       overflow-wrap: anywhere;
     }
 
-    .pop-tag {
-      background: rgba(56,189,248,0.1);
-      border: 1px solid rgba(125,211,252,0.22);
-      border-radius: 999px;
-      padding: 2px 6px 1px;
-      font-size: 0.55rem;
-      width: fit-content;
-    }
-
-    /* small screen: popover above */
-    @media (max-width: 540px) {
-      .popover {
-        bottom: auto;
-        top: 4px;
-        transform: translate(-50%, -105%);
-      }
-      .pill.open .popover {
-        transform: translate(-50%, -102%);
-      }
-      .pill {
-        min-height: 72px;
+    /* mobile */
+    @media (max-width: 680px) {
+      body { padding-bottom: 150px; }
+      .cards {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
       }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <header class="header">
-      <div class="avatar">🌀</div>
-      <div class="name">TwojaKsywa</div>
-      <p class="subtitle">Klikasz w konkretną platformę i wyskakuje ci mały panel z danymi. Bez przesuwania całej strony.</p>
-      <div class="links">
-        <a class="link-btn" href="#" target="_blank" rel="noreferrer">🐱 GitHub</a>
-        <a class="link-btn" href="#" target="_blank" rel="noreferrer">😼 to jest GitHub!!</a>
+  <div class="bg-blob"></div>
+  <div class="bg-blob two"></div>
+  <div class="particle p1"></div>
+  <div class="particle p2"></div>
+  <div class="particle p3"></div>
+  <div class="particle p4"></div>
+
+  <main class="scene">
+    <header class="hero">
+      <div class="avatar-wrap">
+        <div class="avatar-ring"></div>
+        <div class="avatar">🌀</div>
+      </div>
+      <h1 class="hero-title">TwojaKsywa</h1>
+      <p class="hero-sub">Kliknij dowolny moduł niżej – wyskoczy panel z danymi do mnie na tej platformie.</p>
+      <div class="hero-buttons">
+        <a class="hero-btn" href="#" target="_blank" rel="noreferrer">🐱 GitHub</a>
+        <a class="hero-btn" href="#" target="_blank" rel="noreferrer">😼 to jest GitHub!!</a>
       </div>
     </header>
 
-    <section class="grid" id="grid">
-      <!-- Roblox -->
-      <div class="pill" data-service="roblox">
-        <div class="icon">🧱</div>
-        <div class="pill-body">
-          <div class="title">Roblox</div>
-          <div class="desc">nick / profil</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Nick</span>
-            <span class="pop-value">YourRobloxName</span>
+    <section class="cards" id="cards">
+      <article class="card" data-platform="roblox">
+        <div class="card-top">
+          <div class="card-icon">🧱</div>
+          <div>
+            <div class="card-title">Roblox</div>
+            <div class="card-sub">nick / profil</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Profil</span>
-            <span class="pop-value">roblox.com/users/123456</span>
-          </div>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">rozwiń dane →</div>
+      </article>
 
-      <!-- Riot -->
-      <div class="pill" data-service="riot">
-        <div class="icon">⚔</div>
-        <div class="pill-body">
-          <div class="title">Riot Games</div>
-          <div class="desc">LoL / VAL</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Riot ID</span>
-            <span class="pop-value">Nick#EUW</span>
+      <article class="card" data-platform="riot">
+        <div class="card-top">
+          <div class="card-icon">⚔</div>
+          <div>
+            <div class="card-title">Riot Games</div>
+            <div class="card-sub">LoL / VAL / TFT</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Valorant</span>
-            <span class="pop-value">YourValo#777</span>
-          </div>
-          <span class="pop-tag">EUROPE</span>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">Riot ID i Valorant</div>
+      </article>
 
-      <!-- Discord -->
-      <div class="pill" data-service="discord">
-        <div class="icon">💬</div>
-        <div class="pill-body">
-          <div class="title">Discord</div>
-          <div class="desc">kontakt</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Discord</span>
-            <span class="pop-value">@yourdiscord</span>
+      <article class="card" data-platform="discord">
+        <div class="card-top">
+          <div class="card-icon">💬</div>
+          <div>
+            <div class="card-title">Discord</div>
+            <div class="card-sub">kontakt / serwer</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Serwer</span>
-            <span class="pop-value">discord.gg/yourserver</span>
-          </div>
-          <span class="pop-tag">Owner</span>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">mój nick i serwer</div>
+      </article>
 
-      <!-- Epic -->
-      <div class="pill" data-service="epic">
-        <div class="icon">🕹</div>
-        <div class="pill-body">
-          <div class="title">Epic Games</div>
-          <div class="desc">Fortnite / EG</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Nick FN</span>
-            <span class="pop-value">YourFNname</span>
+      <article class="card" data-platform="epic">
+        <div class="card-top">
+          <div class="card-icon">🕹</div>
+          <div>
+            <div class="card-title">Epic Games</div>
+            <div class="card-sub">Fortnite / EG</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Epic ID</span>
-            <span class="pop-value">your-epic-id</span>
-          </div>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">nick FN + ID</div>
+      </article>
 
-      <!-- Spotify -->
-      <div class="pill" data-service="spotify">
-        <div class="icon">🎧</div>
-        <div class="pill-body">
-          <div class="title">Spotify</div>
-          <div class="desc">profil / playlista</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Profil</span>
-            <span class="pop-value">open.spotify.com/user/yourid</span>
+      <article class="card" data-platform="spotify">
+        <div class="card-top">
+          <div class="card-icon">🎧</div>
+          <div>
+            <div class="card-title">Spotify</div>
+            <div class="card-sub">profil / playlisty</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Playlista</span>
-            <span class="pop-value">open.spotify.com/playlist/xyz</span>
-          </div>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">link do profilu</div>
+      </article>
 
-      <!-- GitHub -->
-      <div class="pill" data-service="github">
-        <div class="icon">🐱</div>
-        <div class="pill-body">
-          <div class="title">GitHub</div>
-          <div class="desc">to jest GitHub!!</div>
-        </div>
-        <svg class="chev" viewBox="0 0 24 24">
-          <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-        </svg>
-        <div class="popover">
-          <div class="pop-row">
-            <span class="pop-label">Account</span>
-            <span class="pop-value">github.com/yourname</span>
+      <article class="card" data-platform="github">
+        <div class="card-top">
+          <div class="card-icon">🐱</div>
+          <div>
+            <div class="card-title">GitHub</div>
+            <div class="card-sub">to jest GitHub!!</div>
           </div>
-          <div class="pop-row">
-            <span class="pop-label">Repo</span>
-            <span class="pop-value">github.com/yourname/bio</span>
-          </div>
+          <svg class="card-chevron" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
+          </svg>
         </div>
-      </div>
+        <div class="card-bottom">konto + repo</div>
+      </article>
     </section>
+  </main>
+
+  <!-- DETAIL PANEL -->
+  <div class="detail-panel" id="detail-panel">
+    <div class="detail-header">
+      <div class="card-icon" id="detail-icon">🧱</div>
+      <div>
+        <div class="detail-title" id="detail-title">Roblox</div>
+        <div class="detail-sub" id="detail-sub">nick / profil</div>
+      </div>
+      <button class="detail-close" id="detail-close">zamknij</button>
+    </div>
+    <div class="detail-list" id="detail-list">
+      <!-- rows injected -->
+    </div>
   </div>
 
   <script>
-    const pills = document.querySelectorAll('.pill');
+    // dane demo – tu wstawisz swoje prawdziwe
+    const platformData = {
+      roblox: {
+        icon: "🧱",
+        title: "Roblox",
+        sub: "nick / profil",
+        rows: [
+          { label: "Nick", value: "YourRobloxName" },
+          { label: "Profil", value: "roblox.com/users/123456" }
+        ]
+      },
+      riot: {
+        icon: "⚔",
+        title: "Riot Games",
+        sub: "LoL / VAL / TFT",
+        rows: [
+          { label: "Riot ID", value: "Nick#EUW" },
+          { label: "Valorant", value: "YourValo#777" }
+        ]
+      },
+      discord: {
+        icon: "💬",
+        title: "Discord",
+        sub: "kontakt / serwer",
+        rows: [
+          { label: "Discord", value: "@yourdiscord" },
+          { label: "Serwer", value: "discord.gg/yourserver" }
+        ]
+      },
+      epic: {
+        icon: "🕹",
+        title: "Epic Games",
+        sub: "Fortnite / EG",
+        rows: [
+          { label: "Nick FN", value: "YourFNname" },
+          { label: "Epic ID", value: "your-epic-id" }
+        ]
+      },
+      spotify: {
+        icon: "🎧",
+        title: "Spotify",
+        sub: "profil / playlisty",
+        rows: [
+          { label: "Profil", value: "open.spotify.com/user/yourid" },
+          { label: "Playlista", value: "open.spotify.com/playlist/xyz" }
+        ]
+      },
+      github: {
+        icon: "🐱",
+        title: "GitHub",
+        sub: "to jest GitHub!!",
+        rows: [
+          { label: "Account", value: "github.com/yourname" },
+          { label: "Repo", value: "github.com/yourname/bio" }
+        ]
+      }
+    };
 
-    pills.forEach(pill => {
-      pill.addEventListener('click', (e) => {
-        const isOpen = pill.classList.contains('open');
+    const cards = document.querySelectorAll(".card");
+    const panel = document.getElementById("detail-panel");
+    const detailIcon = document.getElementById("detail-icon");
+    const detailTitle = document.getElementById("detail-title");
+    const detailSub = document.getElementById("detail-sub");
+    const detailList = document.getElementById("detail-list");
+    const closeBtn = document.getElementById("detail-close");
 
-        // zamknij wszystkie
-        pills.forEach(p => p.classList.remove('open'));
+    cards.forEach(card => {
+      card.addEventListener("click", () => {
+        const platform = card.dataset.platform;
+        const data = platformData[platform];
+        if (!data) return;
 
-        // jeśli kliknięty nie był otwarty, to otwórz
-        if (!isOpen) {
-          pill.classList.add('open');
-        }
+        // set content
+        detailIcon.textContent = data.icon;
+        detailTitle.textContent = data.title;
+        detailSub.textContent = data.sub;
+        detailList.innerHTML = "";
+        data.rows.forEach(row => {
+          const div = document.createElement("div");
+          div.className = "detail-row";
+          div.innerHTML = `<span class="detail-label">${row.label}</span><span class="detail-value">${row.value}</span>`;
+          detailList.appendChild(div);
+        });
 
-        e.stopPropagation();
+        panel.classList.add("show");
       });
     });
 
-    // kliknięcie poza – zamknij
-    document.addEventListener('click', () => {
-      pills.forEach(p => p.classList.remove('open'));
+    closeBtn.addEventListener("click", () => {
+      panel.classList.remove("show");
+    });
+
+    // klik poza panelem
+    document.addEventListener("click", (e) => {
+      const insidePanel = e.target.closest("#detail-panel");
+      const insideCard = e.target.closest(".card");
+      if (!insidePanel && !insideCard) {
+        panel.classList.remove("show");
+      }
     });
   </script>
 </body>
