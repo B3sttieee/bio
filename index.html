@@ -3,283 +3,266 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Holo BIO Ultra</title>
+  <title>Orbit BIO</title>
   <style>
     :root {
-      --bg: radial-gradient(circle at top, #020617 0%, #020617 35%, #000 90%);
-      --panel: rgba(2, 6, 23, 0.6);
-      --glass: rgba(7, 11, 29, 0.4);
-      --line: rgba(148, 163, 184, 0.05);
-      --accent: #38bdf8;
-      --accent2: #f43f5e;
-      --white: #e2e8f0;
+      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 45%, #000 100%);
+      --card: rgba(2, 6, 23, 0.35);
+      --card-border: rgba(148, 163, 184, 0.15);
+      --panel: rgba(2, 6, 23, 0.8);
+      --text: #e2e8f0;
       --muted: rgba(226, 232, 240, 0.55);
-      --duration: 0.3s;
+      --accent: #38bdf8;
+      --radius: 18px;
+      --dur: 0.25s;
     }
+
     * {
       box-sizing: border-box;
     }
+
     body {
       margin: 0;
       min-height: 100vh;
       background: var(--bg);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      color: var(--white);
+      color: var(--text);
       overflow: hidden;
+      display: grid;
+      place-items: center;
     }
 
-    /* BACKGROUND GRID + GLOWS */
-    .bg-layer {
+    /* tło siatka */
+    .grid-bg {
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.03) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.018) 1px, transparent 1px);
+        linear-gradient(to right, rgba(148,163,184,0.05) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148,163,184,0.03) 1px, transparent 1px);
       background-size: 80px 80px;
       pointer-events: none;
-      z-index: 1;
-      animation: slideGrid 25s linear infinite;
+      opacity: .5;
     }
-    @keyframes slideGrid {
-      to {
-        background-position: 80px 160px;
-      }
-    }
-    .bg-glow {
+
+    /* lekki glow */
+    .glow {
       position: fixed;
-      width: 1200px;
-      height: 1200px;
-      background: radial-gradient(circle, rgba(56,189,248,0.25) 0%, rgba(2,6,23,0) 60%);
-      top: -300px;
+      width: 1100px;
+      height: 1100px;
+      background: radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(2,6,23,0) 60%);
+      top: -230px;
       left: 50%;
       transform: translateX(-50%);
-      filter: blur(12px);
-      opacity: .8;
-      z-index: 0;
+      filter: blur(10px);
+      opacity: .5;
+      pointer-events: none;
     }
-    .bg-glow.two {
+    .glow.two {
       top: auto;
-      bottom: -600px;
-      background: radial-gradient(circle, rgba(244,63,94,0.15) 0%, rgba(2,6,23,0) 60%);
-      opacity: .6;
+      bottom: -450px;
+      background: radial-gradient(circle, rgba(99,102,241,0.16) 0%, rgba(2,6,23,0) 65%);
     }
 
-    /* MAIN STAGE */
-    .stage {
+    /* scena */
+    .scene {
       position: relative;
-      height: 100vh;
-      width: 100vw;
-      display: grid;
-      place-items: center;
-      z-index: 5;
-      perspective: 1200px;
-    }
-
-    .center-wrap {
-      position: relative;
-      width: min(800px, 100%);
+      width: min(880px, 100%);
       aspect-ratio: 1 / 1;
-      transform-style: preserve-3d;
-      transition: transform 0.2s ease-out;
-    }
-
-    /* CORE */
-    .core {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 150px;
-      height: 150px;
-      transform: translate(-50%, -50%);
-      border-radius: 999px;
-      background: radial-gradient(circle at 20% 20%, #38bdf8 0%, #020617 85%);
-      border: 4px solid rgba(226, 232, 240, 0.6);
       display: grid;
       place-items: center;
-      font-size: 60px;
-      font-weight: 700;
-      box-shadow: 0 0 45px rgba(56,189,248,0.7);
-      z-index: 5;
+    }
+
+    /* rdzeń */
+    .core {
+      position: relative;
+      width: 165px;
+      height: 165px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 75%);
+      border: 4px solid rgba(226,232,240,0.4);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 0 50px rgba(56,189,248,0.45);
+      z-index: 4;
+    }
+
+    .core-icon {
+      font-size: 58px;
     }
 
     .core-ring {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 280px;
-      height: 280px;
-      transform: translate(-50%, -50%);
+      inset: -34px;
       border-radius: 999px;
-      border: 1px solid rgba(226,232,240,0.1);
-      box-shadow: 0 0 160px rgba(56,189,248,0.16);
-      animation: pulse 3s ease-in-out infinite;
-    }
-    .core-ring.inner {
-      width: 210px;
-      height: 210px;
-      border: 1px dashed rgba(148,163,184,0.25);
-      animation: none;
-      opacity: .6;
-    }
-    @keyframes pulse {
-      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
-      50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+      border: 1px solid rgba(148,163,184,0.1);
+      box-shadow: 0 0 120px rgba(148,163,184,0.08);
     }
 
-    /* ORBIT */
+    .core-ring.dotted {
+      inset: -70px;
+      border: 1px dashed rgba(148,163,184,0.16);
+    }
+
+    /* orbita */
     .orbit {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 440px;
-      height: 440px;
-      transform: translate(-50%, -50%);
+      width: 520px;
+      height: 520px;
       border-radius: 999px;
-      animation: rotateOrbit 26s linear infinite;
-      transform-origin: center center;
+      animation: orbit-rotate 24s linear infinite;
+      transform-origin: center;
     }
     .orbit.paused {
       animation-play-state: paused;
     }
-    @keyframes rotateOrbit {
-      to {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
+
+    @keyframes orbit-rotate {
+      to { transform: rotate(360deg); }
     }
 
+    /* kafelek */
     .node {
       position: absolute;
-      width: 80px;
-      height: 80px;
-      border-radius: 20px;
-      background: radial-gradient(circle at 25% 25%, rgba(2,6,23,0.12), rgba(2,6,23,0));
-      border: 1px solid rgba(226,232,240,0.3);
+      width: 95px;
+      height: 95px;
+      border-radius: 24px;
+      background: radial-gradient(circle at 10% 10%, rgba(15,23,42,0.5), rgba(15,23,42,0));
+      border: 1px solid rgba(148,163,184,0.18);
+      backdrop-filter: blur(10px);
       display: grid;
       place-items: center;
-      font-size: 1.8rem;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+      transition: transform .15s ease, border .15s ease, box-shadow .15s ease;
       cursor: pointer;
-      backdrop-filter: blur(6px);
-      box-shadow: 0 0 16px rgba(0,0,0,0.35);
-      transition: transform 0.12s ease-out, box-shadow 0.12s ease-out;
     }
+
     .node:hover {
-      transform: scale(1.07);
-      box-shadow: 0 0 22px rgba(56,189,248,0.6);
+      transform: translateZ(0) scale(1.04);
+      border: 1px solid rgba(56,189,248,0.45);
+      box-shadow: 0 16px 32px rgba(56,189,248,0.14);
     }
+
     .node.active {
-      border-color: rgba(56,189,248,1);
-      box-shadow: 0 0 30px rgba(56,189,248,0.7);
+      border: 1px solid rgba(56,189,248,0.9);
+      box-shadow: 0 18px 40px rgba(56,189,248,0.35);
     }
 
-    /* position nodes on orbit */
-    .node.roblox { top: -32px; left: 50%; transform: translate(-50%, 0); }
-    .node.riot { right: -14px; top: 25%; }
-    .node.discord { right: 5%; bottom: -20px; }
-    .node.epic { bottom: -35px; left: 50%; transform: translate(-50%, 0); }
-    .node.spotify { left: -14px; top: 25%; }
-    .node.github { left: 5%; bottom: -20px; }
+    .node-icon {
+      font-size: 1.6rem;
+    }
 
-    /* HOLO PANEL */
-    .holo-panel {
+    /* pozycje jak na screenie, lekko obrócone */
+    .node.t1 { top: 20px; left: 50%; transform: translateX(-50%) rotate(10deg); }
+    .node.t2 { right: 60px; top: 155px; transform: rotate(15deg); }
+    .node.t3 { right: 65px; bottom: 140px; transform: rotate(-8deg); }
+    .node.t4 { left: 50%; bottom: 32px; transform: translateX(-50%) rotate(-8deg); }
+    .node.t5 { left: 65px; bottom: 140px; transform: rotate(4deg); }
+    .node.t6 { left: 60px; top: 155px; transform: rotate(-20deg); }
+
+    /* panel danych */
+    .data-panel {
       position: fixed;
-      width: min(640px, 100% - 24px);
       left: 50%;
-      bottom: 16px;
-      transform: translate(-50%, 160%);
-      background: linear-gradient(130deg, rgba(2,6,23,0.92) 0%, rgba(2,6,23,0.45) 80%);
-      border: 1px solid rgba(148,163,184,0.4);
-      border-radius: 16px;
-      backdrop-filter: blur(18px);
-      box-shadow: 0 0 60px rgba(0,0,0,0.45);
-      z-index: 99;
-      transition: transform var(--duration) ease, opacity var(--duration) ease;
+      bottom: 18px;
+      transform: translate(-50%, 130%);
+      width: min(580px, 100% - 24px);
+      background: radial-gradient(circle at top, rgba(2,6,23,0.9) 0%, rgba(2,6,23,0.55) 90%);
+      border: 1px solid rgba(148,163,184,0.3);
+      border-radius: 18px;
+      backdrop-filter: blur(16px);
+      padding: 10px 14px 12px;
+      box-shadow: 0 16px 60px rgba(0,0,0,0.45);
+      transition: transform var(--dur) ease, opacity var(--dur) ease;
       opacity: 0;
+      z-index: 10;
     }
-    .holo-panel.show {
+
+    .data-panel.show {
       transform: translate(-50%, 0);
       opacity: 1;
     }
-    .holo-header {
+
+    .panel-head {
       display: flex;
       gap: 10px;
       align-items: center;
-      padding: 10px 14px 6px;
     }
-    .holo-icon {
-      width: 32px;
-      height: 32px;
+    .panel-icon {
+      width: 34px;
+      height: 34px;
       border-radius: 12px;
-      background: rgba(15,23,42,0.4);
+      background: rgba(15,23,42,0.55);
       display: grid;
       place-items: center;
       font-size: 1.2rem;
     }
-    .holo-title {
+    .panel-title {
       font-weight: 600;
     }
-    .holo-sub {
+    .panel-sub {
       font-size: 0.65rem;
-      color: rgba(226,232,240,0.55);
+      color: var(--muted);
     }
-    .holo-close {
+    .panel-close {
       margin-left: auto;
-      background: rgba(248, 113, 113, 0.08);
-      border: 1px solid rgba(248, 113, 113, 0.3);
+      background: rgba(248,113,113,0.05);
+      border: 1px solid rgba(248,113,113,0.2);
       color: #fee2e2;
       border-radius: 999px;
       font-size: 0.55rem;
-      padding: 2px 10px 2px;
+      padding: 2px 9px 1px;
       cursor: pointer;
     }
-    .holo-body {
-      padding: 5px 14px 12px;
+
+    .panel-body {
       display: flex;
       flex-direction: column;
       gap: 6px;
+      margin-top: 6px;
     }
-    .holo-row {
-      background: rgba(15,23,42,0.3);
-      border: 1px solid rgba(148,163,184,0.15);
-      border-radius: 12px;
-      padding: 5px 8px;
+    .panel-row {
+      background: rgba(15,23,42,0.35);
+      border: 1px solid rgba(148,163,184,0.07);
+      border-radius: 10px;
+      padding: 5px 7px 4px;
+      font-size: 0.7rem;
       display: flex;
       justify-content: space-between;
-      gap: 8px;
-      font-size: 0.7rem;
+      gap: 6px;
     }
-    .holo-label {
-      color: rgba(226,232,240,0.7);
+    .panel-label {
+      color: rgba(226,232,240,0.75);
     }
-    .holo-value {
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    .panel-value {
       color: #bae6fd;
-      max-width: 280px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       text-align: right;
+      max-width: 230px;
       overflow-wrap: anywhere;
     }
 
-    /* TOP SMALL HUD */
+    /* HUD góra */
     .hud {
       position: fixed;
       top: 14px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(2,6,23,0.6);
+      background: rgba(2,6,23,0.35);
       border: 1px solid rgba(148,163,184,0.25);
       border-radius: 999px;
-      padding: 4px 14px 4px 8px;
+      padding: 4px 14px 4px 6px;
       display: flex;
-      gap: 6px;
+      gap: 8px;
       align-items: center;
-      z-index: 50;
-      backdrop-filter: blur(12px);
+      backdrop-filter: blur(10px);
+      z-index: 20;
       font-size: 0.65rem;
     }
-    .hud-avatar {
+    .hud-ava {
       width: 26px;
       height: 26px;
       border-radius: 999px;
-      background: linear-gradient(120deg, #38bdf8, #f43f5e);
+      background: linear-gradient(120deg, #38bdf8 0%, #6366f1 100%);
       display: grid;
       place-items: center;
       font-size: 0.9rem;
@@ -289,92 +272,99 @@
       font-weight: 500;
     }
     .hud-tag {
-      background: rgba(148,163,184,0.1);
-      border: 1px solid rgba(148,163,184,0.23);
+      background: rgba(148,163,184,0.12);
+      border: 1px solid rgba(148,163,184,0.22);
       border-radius: 999px;
-      padding: 2px 8px 1px;
-      font-size: 0.58rem;
-      color: rgba(226,232,240,0.8);
+      padding: 2px 6px 1px;
+      font-size: 0.55rem;
     }
 
-    @media (max-width: 580px) {
-      .center-wrap {
+    @media (max-width: 640px) {
+      .scene {
         width: 100%;
       }
       .orbit {
-        width: 300px;
-        height: 300px;
+        width: 360px;
+        height: 360px;
       }
       .node {
-        width: 62px;
-        height: 62px;
-        font-size: 1.35rem;
+        width: 78px;
+        height: 78px;
       }
       .core {
-        width: 118px;
-        height: 118px;
-        font-size: 48px;
+        width: 140px;
+        height: 140px;
       }
-      .holo-panel {
+      .data-panel {
         width: 100%;
         border-radius: 16px 16px 0 0;
-      }
-      .hud {
-        top: 10px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="bg-layer"></div>
-  <div class="bg-glow"></div>
-  <div class="bg-glow two"></div>
+  <div class="grid-bg"></div>
+  <div class="glow"></div>
+  <div class="glow two"></div>
 
   <div class="hud">
-    <div class="hud-avatar">S</div>
+    <div class="hud-ava">S</div>
     <div>
       <div class="hud-name">TwojaKsywa</div>
-      <div style="font-size:0.55rem;opacity:.7;">gaming / social bio</div>
+      <div style="opacity:.6;font-size:0.55rem">orbit bio</div>
     </div>
-    <div class="hud-tag">GitHub</div>
     <div class="hud-tag">Roblox</div>
     <div class="hud-tag">Discord</div>
+    <div class="hud-tag">GitHub</div>
   </div>
 
-  <main class="stage">
-    <div class="center-wrap" id="center-wrap">
-      <div class="core-ring inner"></div>
+  <main class="scene">
+    <div class="core">
+      <div class="core-icon">🌀</div>
       <div class="core-ring"></div>
-      <div class="core">🌀</div>
+      <div class="core-ring dotted"></div>
+    </div>
 
-      <div class="orbit" id="orbit">
-        <div class="node roblox" data-platform="roblox" title="Roblox">🧱</div>
-        <div class="node riot" data-platform="riot" title="Riot">⚔</div>
-        <div class="node discord" data-platform="discord" title="Discord">💬</div>
-        <div class="node epic" data-platform="epic" title="Epic">🕹</div>
-        <div class="node spotify" data-platform="spotify" title="Spotify">🎧</div>
-        <div class="node github" data-platform="github" title="GitHub">🐱</div>
+    <div class="orbit" id="orbit">
+      <!-- tak jak na screenie, 6 kafelków -->
+      <div class="node t1" data-platform="roblox" title="Roblox">
+        <span class="node-icon">🧱</span>
+      </div>
+      <div class="node t2" data-platform="riot" title="Riot Games">
+        <span class="node-icon">⚔</span>
+      </div>
+      <div class="node t3" data-platform="discord" title="Discord">
+        <span class="node-icon">💬</span>
+      </div>
+      <div class="node t4" data-platform="epic" title="Epic Games">
+        <span class="node-icon">🕹</span>
+      </div>
+      <div class="node t5" data-platform="spotify" title="Spotify">
+        <span class="node-icon">🎧</span>
+      </div>
+      <div class="node t6" data-platform="github" title="GitHub">
+        <span class="node-icon">🐱</span>
       </div>
     </div>
   </main>
 
-  <!-- HOLO DATA PANEL -->
-  <div class="holo-panel" id="holo-panel">
-    <div class="holo-header">
-      <div class="holo-icon" id="hp-icon">🧱</div>
+  <!-- panel danych -->
+  <div class="data-panel" id="data-panel">
+    <div class="panel-head">
+      <div class="panel-icon" id="p-icon">🧱</div>
       <div>
-        <div class="holo-title" id="hp-title">Roblox</div>
-        <div class="holo-sub" id="hp-sub">nick / profil</div>
+        <div class="panel-title" id="p-title">Roblox</div>
+        <div class="panel-sub" id="p-sub">nick / profil</div>
       </div>
-      <button class="holo-close" id="hp-close">zamknij</button>
+      <button class="panel-close" id="p-close">zamknij</button>
     </div>
-    <div class="holo-body" id="hp-body">
-      <!-- JS will fill -->
+    <div class="panel-body" id="p-body">
+      <!-- wypełnia JS -->
     </div>
   </div>
 
   <script>
-    // TU podmień na swoje prawdziwe dane:
+    // tutaj wklejasz swoje realne dane
     const DATA = {
       roblox: {
         icon: "🧱",
@@ -382,7 +372,7 @@
         sub: "nick / profil",
         rows: [
           { label: "Nick", value: "YourRobloxName" },
-          { label: "Profil", value: "roblox.com/users/123456" },
+          { label: "Profil", value: "roblox.com/users/123456" }
         ]
       },
       riot: {
@@ -391,7 +381,7 @@
         sub: "LoL / VAL / TFT",
         rows: [
           { label: "Riot ID", value: "Nick#EUW" },
-          { label: "Valorant", value: "YourValo#777" },
+          { label: "Valorant", value: "YourValo#777" }
         ]
       },
       discord: {
@@ -400,7 +390,7 @@
         sub: "kontakt / serwer",
         rows: [
           { label: "Discord", value: "@yourdiscord" },
-          { label: "Serwer", value: "discord.gg/yourserver" },
+          { label: "Serwer", value: "discord.gg/yourserver" }
         ]
       },
       epic: {
@@ -409,7 +399,7 @@
         sub: "Fortnite / EG",
         rows: [
           { label: "Nick FN", value: "YourFNname" },
-          { label: "Epic ID", value: "your-epic-id" },
+          { label: "Epic ID", value: "your-epic-id" }
         ]
       },
       spotify: {
@@ -418,7 +408,7 @@
         sub: "profil / playlisty",
         rows: [
           { label: "Profil", value: "open.spotify.com/user/yourid" },
-          { label: "Playlista", value: "open.spotify.com/playlist/xyz" },
+          { label: "Playlista", value: "open.spotify.com/playlist/xyz" }
         ]
       },
       github: {
@@ -427,20 +417,19 @@
         sub: "to jest GitHub!!",
         rows: [
           { label: "Account", value: "github.com/yourname" },
-          { label: "Repo", value: "github.com/yourname/bio" },
+          { label: "Repo", value: "github.com/yourname/bio" }
         ]
       }
     };
 
     const orbit = document.getElementById("orbit");
     const nodes = document.querySelectorAll(".node");
-    const panel = document.getElementById("holo-panel");
-    const pIcon = document.getElementById("hp-icon");
-    const pTitle = document.getElementById("hp-title");
-    const pSub = document.getElementById("hp-sub");
-    const pBody = document.getElementById("hp-body");
-    const pClose = document.getElementById("hp-close");
-    const centerWrap = document.getElementById("center-wrap");
+    const panel = document.getElementById("data-panel");
+    const pIcon = document.getElementById("p-icon");
+    const pTitle = document.getElementById("p-title");
+    const pSub = document.getElementById("p-sub");
+    const pBody = document.getElementById("p-body");
+    const pClose = document.getElementById("p-close");
 
     nodes.forEach(node => {
       node.addEventListener("click", (e) => {
@@ -448,28 +437,26 @@
         const data = DATA[key];
         if (!data) return;
 
-        // aktywna kapsuła
+        // aktywny kafelek
         nodes.forEach(n => n.classList.remove("active"));
         node.classList.add("active");
 
-        // zatrzymaj orbitę
+        // zatrzymaj obrót
         orbit.classList.add("paused");
 
-        // panel content
+        // ustaw panel
         pIcon.textContent = data.icon;
         pTitle.textContent = data.title;
         pSub.textContent = data.sub;
         pBody.innerHTML = "";
         data.rows.forEach(row => {
-          const el = document.createElement("div");
-          el.className = "holo-row";
-          el.innerHTML = `<span class="holo-label">${row.label}</span><span class="holo-value">${row.value}</span>`;
-          pBody.appendChild(el);
+          const div = document.createElement("div");
+          div.className = "panel-row";
+          div.innerHTML = `<span class="panel-label">${row.label}</span><span class="panel-value">${row.value}</span>`;
+          pBody.appendChild(div);
         });
 
-        // pokaż panel
         panel.classList.add("show");
-
         e.stopPropagation();
       });
     });
@@ -482,20 +469,13 @@
 
     // klik poza
     document.addEventListener("click", (e) => {
-      const inside = e.target.closest(".holo-panel");
-      const nodeClick = e.target.closest(".node");
-      if (!inside && !nodeClick) {
+      const inPanel = e.target.closest(".data-panel");
+      const inNode = e.target.closest(".node");
+      if (!inPanel && !inNode) {
         panel.classList.remove("show");
         orbit.classList.remove("paused");
         nodes.forEach(n => n.classList.remove("active"));
       }
-    });
-
-    // parallax
-    window.addEventListener("mousemove", (e) => {
-      const x = (e.clientX / window.innerWidth) - 0.5;
-      const y = (e.clientY / window.innerHeight) - 0.5;
-      centerWrap.style.transform = `rotateX(${y * 8}deg) rotateY(${x * 10}deg)`;
     });
   </script>
 </body>
