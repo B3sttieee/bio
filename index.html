@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbit BIO</title>
+  <title>Orbit Bio</title>
   <style>
     :root {
-      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 45%, #000 100%);
-      --card: rgba(2, 6, 23, 0.35);
-      --card-border: rgba(148, 163, 184, 0.15);
-      --panel: rgba(2, 6, 23, 0.8);
+      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 50%, #000 100%);
+      --tile: rgba(5, 9, 22, 0.4);
+      --tile-border: rgba(226, 232, 240, 0.06);
+      --tile-hover: rgba(18, 31, 58, 0.55);
+      --panel: rgba(2, 6, 23, 0.82);
+      --panel-border: rgba(148, 163, 184, 0.2);
       --text: #e2e8f0;
-      --muted: rgba(226, 232, 240, 0.55);
-      --accent: #38bdf8;
-      --radius: 18px;
+      --muted: rgba(226, 232, 240, 0.5);
       --dur: 0.25s;
     }
 
@@ -27,156 +27,132 @@
       background: var(--bg);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      overflow: hidden;
       display: grid;
       place-items: center;
+      overflow: hidden;
     }
 
-    /* tło siatka */
+    /* delikatna siatka */
     .grid-bg {
       position: fixed;
       inset: 0;
       background-image:
-        linear-gradient(to right, rgba(148,163,184,0.05) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148,163,184,0.03) 1px, transparent 1px);
-      background-size: 80px 80px;
+        linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
+      background-size: 90px 90px;
       pointer-events: none;
-      opacity: .5;
+      opacity: .6;
     }
 
-    /* lekki glow */
-    .glow {
-      position: fixed;
-      width: 1100px;
-      height: 1100px;
-      background: radial-gradient(circle, rgba(56,189,248,0.22) 0%, rgba(2,6,23,0) 60%);
-      top: -230px;
-      left: 50%;
-      transform: translateX(-50%);
-      filter: blur(10px);
-      opacity: .5;
-      pointer-events: none;
-    }
-    .glow.two {
-      top: auto;
-      bottom: -450px;
-      background: radial-gradient(circle, rgba(99,102,241,0.16) 0%, rgba(2,6,23,0) 65%);
-    }
-
-    /* scena */
     .scene {
       position: relative;
-      width: min(880px, 100%);
+      width: min(820px, 100%);
       aspect-ratio: 1 / 1;
       display: grid;
       place-items: center;
     }
 
-    /* rdzeń */
+    /* kula w środku */
     .core {
       position: relative;
-      width: 165px;
-      height: 165px;
+      width: 180px;
+      height: 180px;
       border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 75%);
-      border: 4px solid rgba(226,232,240,0.4);
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 70%);
+      border: 3px solid rgba(226,232,240,0.45);
+      box-shadow: 0 30px 70px rgba(0,0,0,0.35);
       display: grid;
       place-items: center;
-      box-shadow: 0 0 50px rgba(56,189,248,0.45);
-      z-index: 4;
+      z-index: 3;
     }
-
     .core-icon {
       font-size: 58px;
+      color: #020617;
+      text-shadow: 0 6px 16px rgba(0,0,0,.45);
     }
 
-    .core-ring {
+    /* cienki pierścień */
+    .ring {
       position: absolute;
-      inset: -34px;
+      width: 360px;
+      height: 360px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.1);
-      box-shadow: 0 0 120px rgba(148,163,184,0.08);
-    }
-
-    .core-ring.dotted {
-      inset: -70px;
-      border: 1px dashed rgba(148,163,184,0.16);
+      border: 1px dashed rgba(148, 163, 184, 0.2);
     }
 
     /* orbita */
     .orbit {
       position: absolute;
-      width: 520px;
-      height: 520px;
-      border-radius: 999px;
-      animation: orbit-rotate 24s linear infinite;
+      width: 460px;
+      height: 460px;
+      animation: orbit 18s linear infinite;
       transform-origin: center;
     }
-    .orbit.paused {
-      animation-play-state: paused;
-    }
-
-    @keyframes orbit-rotate {
+    @keyframes orbit {
       to { transform: rotate(360deg); }
     }
 
     /* kafelek */
-    .node {
+    .tile {
       position: absolute;
-      width: 95px;
-      height: 95px;
-      border-radius: 24px;
-      background: radial-gradient(circle at 10% 10%, rgba(15,23,42,0.5), rgba(15,23,42,0));
-      border: 1px solid rgba(148,163,184,0.18);
-      backdrop-filter: blur(10px);
+      width: 105px;
+      height: 105px;
+      border-radius: 26px;
+      background: var(--tile);
+      border: 1px solid var(--tile-border);
+      backdrop-filter: blur(8px);
       display: grid;
       place-items: center;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-      transition: transform .15s ease, border .15s ease, box-shadow .15s ease;
+      transition: transform .15s ease, background .15s ease, border .15s ease;
+      box-shadow: 0 16px 35px rgba(0,0,0,0.2);
       cursor: pointer;
+      /* to sprawia że kafelek się obraca w drugą stronę i wygląda jakby stał prosto */
+      animation: counter 18s linear infinite;
+    }
+    @keyframes counter {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(-360deg); }
     }
 
-    .node:hover {
-      transform: translateZ(0) scale(1.04);
-      border: 1px solid rgba(56,189,248,0.45);
-      box-shadow: 0 16px 32px rgba(56,189,248,0.14);
+    .tile:hover {
+      background: var(--tile-hover);
+      border: 1px solid rgba(226,232,240,0.15);
+    }
+    .tile.active {
+      border: 1px solid rgba(56,189,248,0.8);
+      background: rgba(15, 23, 42, 0.65);
     }
 
-    .node.active {
-      border: 1px solid rgba(56,189,248,0.9);
-      box-shadow: 0 18px 40px rgba(56,189,248,0.35);
+    .tile-icon {
+      font-size: 1.8rem;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
     }
 
-    .node-icon {
-      font-size: 1.6rem;
-    }
+    /* ustawienia kafelków jak na screenie */
+    .tile.t1 { top: 12px; left: 50%; transform-origin: center; }
+    .tile.t2 { right: 60px; top: 110px; }
+    .tile.t3 { right: 70px; bottom: 115px; }
+    .tile.t4 { bottom: 18px; left: 50%; transform-origin: center; }
+    .tile.t5 { left: 70px; bottom: 115px; }
+    .tile.t6 { left: 60px; top: 110px; }
 
-    /* pozycje jak na screenie, lekko obrócone */
-    .node.t1 { top: 20px; left: 50%; transform: translateX(-50%) rotate(10deg); }
-    .node.t2 { right: 60px; top: 155px; transform: rotate(15deg); }
-    .node.t3 { right: 65px; bottom: 140px; transform: rotate(-8deg); }
-    .node.t4 { left: 50%; bottom: 32px; transform: translateX(-50%) rotate(-8deg); }
-    .node.t5 { left: 65px; bottom: 140px; transform: rotate(4deg); }
-    .node.t6 { left: 60px; top: 155px; transform: rotate(-20deg); }
-
-    /* panel danych */
+    /* panel danych na dole */
     .data-panel {
       position: fixed;
+      bottom: 14px;
       left: 50%;
-      bottom: 18px;
-      transform: translate(-50%, 130%);
-      width: min(580px, 100% - 24px);
-      background: radial-gradient(circle at top, rgba(2,6,23,0.9) 0%, rgba(2,6,23,0.55) 90%);
-      border: 1px solid rgba(148,163,184,0.3);
-      border-radius: 18px;
-      backdrop-filter: blur(16px);
-      padding: 10px 14px 12px;
+      transform: translate(-50%, 120%);
+      width: min(520px, 100% - 20px);
+      background: var(--panel);
+      border: 1px solid var(--panel-border);
+      border-radius: 16px;
+      backdrop-filter: blur(14px);
       box-shadow: 0 16px 60px rgba(0,0,0,0.45);
+      padding: 10px 14px 12px;
       transition: transform var(--dur) ease, opacity var(--dur) ease;
       opacity: 0;
       z-index: 10;
     }
-
     .data-panel.show {
       transform: translate(-50%, 0);
       opacity: 1;
@@ -188,10 +164,10 @@
       align-items: center;
     }
     .panel-icon {
-      width: 34px;
-      height: 34px;
+      width: 32px;
+      height: 32px;
       border-radius: 12px;
-      background: rgba(15,23,42,0.55);
+      background: rgba(15,23,42,0.35);
       display: grid;
       place-items: center;
       font-size: 1.2rem;
@@ -200,17 +176,17 @@
       font-weight: 600;
     }
     .panel-sub {
-      font-size: 0.65rem;
+      font-size: 0.63rem;
       color: var(--muted);
     }
     .panel-close {
       margin-left: auto;
       background: rgba(248,113,113,0.05);
-      border: 1px solid rgba(248,113,113,0.2);
-      color: #fee2e2;
+      border: 1px solid rgba(248,113,113,0.25);
       border-radius: 999px;
       font-size: 0.55rem;
-      padding: 2px 9px 1px;
+      padding: 2px 7px 1px;
+      color: #fee2e2;
       cursor: pointer;
     }
 
@@ -218,17 +194,17 @@
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-top: 6px;
+      margin-top: 5px;
     }
     .panel-row {
-      background: rgba(15,23,42,0.35);
-      border: 1px solid rgba(148,163,184,0.07);
+      background: rgba(15,23,42,0.3);
+      border: 1px solid rgba(148,163,184,0.08);
       border-radius: 10px;
-      padding: 5px 7px 4px;
-      font-size: 0.7rem;
+      padding: 4px 7px 3px;
       display: flex;
       justify-content: space-between;
       gap: 6px;
+      font-size: 0.68rem;
     }
     .panel-label {
       color: rgba(226,232,240,0.75);
@@ -236,119 +212,52 @@
     .panel-value {
       color: #bae6fd;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      max-width: 250px;
       text-align: right;
-      max-width: 230px;
       overflow-wrap: anywhere;
     }
 
-    /* HUD góra */
-    .hud {
-      position: fixed;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(2,6,23,0.35);
-      border: 1px solid rgba(148,163,184,0.25);
-      border-radius: 999px;
-      padding: 4px 14px 4px 6px;
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      backdrop-filter: blur(10px);
-      z-index: 20;
-      font-size: 0.65rem;
-    }
-    .hud-ava {
-      width: 26px;
-      height: 26px;
-      border-radius: 999px;
-      background: linear-gradient(120deg, #38bdf8 0%, #6366f1 100%);
-      display: grid;
-      place-items: center;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .hud-name {
-      font-weight: 500;
-    }
-    .hud-tag {
-      background: rgba(148,163,184,0.12);
-      border: 1px solid rgba(148,163,184,0.22);
-      border-radius: 999px;
-      padding: 2px 6px 1px;
-      font-size: 0.55rem;
-    }
-
-    @media (max-width: 640px) {
-      .scene {
-        width: 100%;
-      }
-      .orbit {
-        width: 360px;
-        height: 360px;
-      }
-      .node {
-        width: 78px;
-        height: 78px;
-      }
-      .core {
-        width: 140px;
-        height: 140px;
-      }
-      .data-panel {
-        width: 100%;
-        border-radius: 16px 16px 0 0;
-      }
+    @media (max-width: 600px) {
+      .scene { width: 100%; }
+      .core { width: 140px; height: 140px; }
+      .orbit { width: 350px; height: 350px; }
+      .tile { width: 88px; height: 88px; }
+      .data-panel { width: 100%; border-radius: 16px 16px 0 0; }
     }
   </style>
 </head>
 <body>
   <div class="grid-bg"></div>
-  <div class="glow"></div>
-  <div class="glow two"></div>
-
-  <div class="hud">
-    <div class="hud-ava">S</div>
-    <div>
-      <div class="hud-name">TwojaKsywa</div>
-      <div style="opacity:.6;font-size:0.55rem">orbit bio</div>
-    </div>
-    <div class="hud-tag">Roblox</div>
-    <div class="hud-tag">Discord</div>
-    <div class="hud-tag">GitHub</div>
-  </div>
 
   <main class="scene">
     <div class="core">
       <div class="core-icon">🌀</div>
-      <div class="core-ring"></div>
-      <div class="core-ring dotted"></div>
     </div>
+    <div class="ring"></div>
 
     <div class="orbit" id="orbit">
-      <!-- tak jak na screenie, 6 kafelków -->
-      <div class="node t1" data-platform="roblox" title="Roblox">
-        <span class="node-icon">🧱</span>
+      <div class="tile t1" data-platform="github" title="GitHub">
+        <span class="tile-icon">🐱</span>
       </div>
-      <div class="node t2" data-platform="riot" title="Riot Games">
-        <span class="node-icon">⚔</span>
+      <div class="tile t2" data-platform="riot" title="Riot Games">
+        <span class="tile-icon">⚔</span>
       </div>
-      <div class="node t3" data-platform="discord" title="Discord">
-        <span class="node-icon">💬</span>
+      <div class="tile t3" data-platform="roblox" title="Roblox">
+        <span class="tile-icon">🧱</span>
       </div>
-      <div class="node t4" data-platform="epic" title="Epic Games">
-        <span class="node-icon">🕹</span>
+      <div class="tile t4" data-platform="epic" title="Epic Games">
+        <span class="tile-icon">🕹</span>
       </div>
-      <div class="node t5" data-platform="spotify" title="Spotify">
-        <span class="node-icon">🎧</span>
+      <div class="tile t5" data-platform="spotify" title="Spotify">
+        <span class="tile-icon">🎧</span>
       </div>
-      <div class="node t6" data-platform="github" title="GitHub">
-        <span class="node-icon">🐱</span>
+      <div class="tile t6" data-platform="discord" title="Discord">
+        <span class="tile-icon">💬</span>
       </div>
     </div>
   </main>
 
-  <!-- panel danych -->
+  <!-- panel z danymi -->
   <div class="data-panel" id="data-panel">
     <div class="panel-head">
       <div class="panel-icon" id="p-icon">🧱</div>
@@ -359,20 +268,20 @@
       <button class="panel-close" id="p-close">zamknij</button>
     </div>
     <div class="panel-body" id="p-body">
-      <!-- wypełnia JS -->
+      <!-- tu wpadają dane z JS -->
     </div>
   </div>
 
   <script>
-    // tutaj wklejasz swoje realne dane
+    // Twoje dane – podmień na swoje
     const DATA = {
-      roblox: {
-        icon: "🧱",
-        title: "Roblox",
-        sub: "nick / profil",
+      github: {
+        icon: "🐱",
+        title: "GitHub",
+        sub: "to jest GitHub!!",
         rows: [
-          { label: "Nick", value: "YourRobloxName" },
-          { label: "Profil", value: "roblox.com/users/123456" }
+          { label: "Account", value: "github.com/yourname" },
+          { label: "Repo", value: "github.com/yourname/bio" }
         ]
       },
       riot: {
@@ -384,13 +293,13 @@
           { label: "Valorant", value: "YourValo#777" }
         ]
       },
-      discord: {
-        icon: "💬",
-        title: "Discord",
-        sub: "kontakt / serwer",
+      roblox: {
+        icon: "🧱",
+        title: "Roblox",
+        sub: "nick / profil",
         rows: [
-          { label: "Discord", value: "@yourdiscord" },
-          { label: "Serwer", value: "discord.gg/yourserver" }
+          { label: "Nick", value: "YourRobloxName" },
+          { label: "Profil", value: "roblox.com/users/123456" }
         ]
       },
       epic: {
@@ -411,19 +320,18 @@
           { label: "Playlista", value: "open.spotify.com/playlist/xyz" }
         ]
       },
-      github: {
-        icon: "🐱",
-        title: "GitHub",
-        sub: "to jest GitHub!!",
+      discord: {
+        icon: "💬",
+        title: "Discord",
+        sub: "kontakt / serwer",
         rows: [
-          { label: "Account", value: "github.com/yourname" },
-          { label: "Repo", value: "github.com/yourname/bio" }
+          { label: "Discord", value: "@yourdiscord" },
+          { label: "Serwer", value: "discord.gg/yourserver" }
         ]
       }
     };
 
-    const orbit = document.getElementById("orbit");
-    const nodes = document.querySelectorAll(".node");
+    const tiles = document.querySelectorAll(".tile");
     const panel = document.getElementById("data-panel");
     const pIcon = document.getElementById("p-icon");
     const pTitle = document.getElementById("p-title");
@@ -431,18 +339,15 @@
     const pBody = document.getElementById("p-body");
     const pClose = document.getElementById("p-close");
 
-    nodes.forEach(node => {
-      node.addEventListener("click", (e) => {
-        const key = node.dataset.platform;
+    tiles.forEach(tile => {
+      tile.addEventListener("click", (e) => {
+        const key = tile.dataset.platform;
         const data = DATA[key];
         if (!data) return;
 
-        // aktywny kafelek
-        nodes.forEach(n => n.classList.remove("active"));
-        node.classList.add("active");
-
-        // zatrzymaj obrót
-        orbit.classList.add("paused");
+        // zaznacz kafelek, ale NIE zatrzymuj obrotu
+        tiles.forEach(t => t.classList.remove("active"));
+        tile.classList.add("active");
 
         // ustaw panel
         pIcon.textContent = data.icon;
@@ -463,18 +368,15 @@
 
     pClose.addEventListener("click", () => {
       panel.classList.remove("show");
-      orbit.classList.remove("paused");
-      nodes.forEach(n => n.classList.remove("active"));
+      tiles.forEach(t => t.classList.remove("active"));
     });
 
-    // klik poza
     document.addEventListener("click", (e) => {
-      const inPanel = e.target.closest(".data-panel");
-      const inNode = e.target.closest(".node");
-      if (!inPanel && !inNode) {
+      const insidePanel = e.target.closest(".data-panel");
+      const insideTile = e.target.closest(".tile");
+      if (!insidePanel && !insideTile) {
         panel.classList.remove("show");
-        orbit.classList.remove("paused");
-        nodes.forEach(n => n.classList.remove("active"));
+        tiles.forEach(t => t.classList.remove("active"));
       }
     });
   </script>
