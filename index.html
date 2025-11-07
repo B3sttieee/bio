@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIO / moje dane</title>
+  <title>My Gaming BIO</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #0d1117;
-      --line: rgba(255,255,255,0.04);
-      --accent: #3b82f6;
+      --bg: radial-gradient(circle at top, #020617 0%, #000 75%);
+      --card-front: rgba(11, 15, 25, 0.9);
+      --card-back: radial-gradient(circle at top, rgba(28, 100, 242, 0.18) 0%, rgba(15, 23, 42, 0.95) 60%);
+      --border: rgba(148, 163, 184, 0.08);
+      --accent: #38bdf8;
       --text: #e2e8f0;
       --muted: #94a3b8;
-      --round: 10px;
-      --dur: 0.18s;
+      --radius: 18px;
     }
 
     * {
@@ -25,419 +25,505 @@
       min-height: 100vh;
       background: var(--bg);
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
       display: flex;
       justify-content: center;
-      padding: 26px 10px 40px;
-      color: var(--text);
+      padding: 28px 14px 50px;
     }
 
-    .wrap {
-      width: min(620px, 100%);
+    .page {
+      width: min(1100px, 100%);
     }
 
-    header.top {
-      margin-bottom: 18px;
-    }
-
-    .title-line {
+    /* top header */
+    .top {
       display: flex;
-      gap: 12px;
       align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
     }
 
     .avatar {
-      width: 44px;
-      height: 44px;
+      width: 58px;
+      height: 58px;
       border-radius: 999px;
-      background: #1f2937;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #0f172a 65%);
       display: grid;
       place-items: center;
       font-weight: 700;
-      font-size: 1.1rem;
-      border: 1px solid rgba(255,255,255,0.02);
+      font-size: 1.3rem;
+      border: 2px solid rgba(226, 232, 240, 0.35);
+      box-shadow: 0 12px 24px rgba(56,189,248,0.3);
+      flex: 0 0 auto;
     }
 
-    .nick-block {
-      flex: 1;
+    .title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
-    .nick {
+    .nickname {
       font-weight: 650;
+      letter-spacing: 0.01em;
     }
 
-    .sub {
-      font-size: 0.7rem;
+    .subtitle {
+      font-size: 0.73rem;
       color: var(--muted);
     }
 
-    .tags {
-      margin-top: 10px;
+    .filters {
+      margin-left: auto;
       display: flex;
-      gap: 6px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
-    .tag {
-      background: #111520;
-      border: 1px solid rgba(255,255,255,0.02);
+    .filter-btn {
+      background: rgba(15, 23, 42, 0.25);
+      border: 1px solid rgba(148, 163, 184, 0.04);
       border-radius: 999px;
-      padding: 2px 8px 1px;
+      padding: 4px 10px 3px;
       font-size: 0.63rem;
       color: #cbd5f5;
     }
 
-    /* list */
-    .list {
-      background: rgba(255,255,255,0.01);
-      border: 1px solid rgba(255,255,255,0.025);
-      border-radius: 14px;
+    @media (max-width: 740px) {
+      .top {
+        flex-wrap: wrap;
+      }
+      .filters {
+        margin-left: 0;
+      }
+    }
+
+    /* grid of cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      perspective: 1200px;
+      cursor: pointer;
+    }
+
+    .card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.45s cubic-bezier(.4,.2,.2,1);
+      transform-style: preserve-3d;
+      border-radius: var(--radius);
+    }
+
+    .card.flipped .card-inner {
+      transform: rotateY(180deg);
+    }
+
+    .card-face {
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius);
+      backface-visibility: hidden;
+      border: 1px solid var(--border);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    .item {
-      border-bottom: 1px solid var(--line);
+    .card-front {
+      background: radial-gradient(circle at top, rgba(15,23,42,1) 0%, rgba(15,23,42,0.25) 65%);
+      padding: 14px 14px 12px;
+      gap: 6px;
     }
 
-    .item:last-child {
-      border-bottom: none;
+    .card-topline {
+      display: flex;
+      gap: 10px;
+      align-items: center;
     }
 
-    .item-header {
+    .icon-box {
+      width: 38px;
+      height: 38px;
+      border-radius: 15px;
+      background: rgba(2, 6, 23, 0.3);
+      display: grid;
+      place-items: center;
+      font-size: 1.3rem;
+    }
+
+    .card-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .card-sub {
+      font-size: 0.63rem;
+      color: var(--muted);
+    }
+
+    .front-footer {
+      margin-top: auto;
+      font-size: 0.58rem;
+      color: rgba(226,232,240,0.4);
+    }
+
+    .card-back {
+      background: var(--card-back);
+      transform: rotateY(180deg);
+      padding: 14px 14px 10px;
+      gap: 7px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .back-head {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 10px 12px;
-      cursor: pointer;
-      transition: background 0.1s ease;
+      margin-bottom: 4px;
     }
 
-    .item-header:hover {
-      background: rgba(255,255,255,0.018);
-    }
-
-    .icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: #111520;
-      display: grid;
-      place-items: center;
-      font-size: 1.05rem;
-    }
-
-    .item-text {
-      flex: 1;
-    }
-
-    .item-title {
-      font-size: 0.8rem;
+    .back-title {
       font-weight: 600;
     }
 
-    .item-sub {
+    .back-sub {
       font-size: 0.62rem;
-      color: var(--muted);
+      color: rgba(226,232,240,0.5);
     }
 
-    .chev {
-      width: 16px;
-      height: 16px;
-      transition: transform var(--dur) ease;
-      opacity: 0.5;
-    }
-
-    /* content */
-    .item-content {
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.18s ease-out, opacity 0.18s ease-out;
-      opacity: 0;
-      background: #0f141e;
-    }
-
-    .item.open .item-content {
-      opacity: 1;
-      /* height auto w JS – tu tylko animacja */
-    }
-
-    .rows {
+    .data-list {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      padding: 8px 12px 10px 50px;
     }
 
-    .row {
+    .data-row {
+      background: rgba(2, 6, 23, 0.08);
+      border: 1px solid rgba(226,232,240,0.06);
+      border-radius: 9px;
+      padding: 4px 7px 4px 7px;
       display: flex;
       justify-content: space-between;
-      gap: 8px;
-      background: #0b0f18;
-      border: 1px solid rgba(255,255,255,0.01);
-      border-radius: 8px;
-      padding: 5px 8px 5px 8px;
-      font-size: 0.68rem;
+      gap: 6px;
+      font-size: 0.63rem;
     }
 
-    .label {
-      color: #dbeafe;
+    .data-label {
+      color: #e2e8f0;
       font-weight: 500;
     }
 
-    .value {
-      color: #93c5fd;
+    .data-value {
+      color: #bae6fd;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.64rem;
-      max-width: 250px;
+      font-size: 0.6rem;
       text-align: right;
       overflow-wrap: anywhere;
+      max-width: 120px;
     }
 
-    .item.open .chev {
-      transform: rotate(180deg);
-      opacity: 0.8;
+    .back-footer {
+      margin-top: auto;
+      font-size: 0.56rem;
+      color: rgba(226,232,240,0.45);
+      display: flex;
+      justify-content: flex-end;
+      gap: 3px;
+      align-items: center;
     }
 
-    /* small github link */
-    .gh {
-      margin-top: 14px;
-      font-size: 0.65rem;
-      color: var(--muted);
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(226,232,240,0.35);
+      display: inline-block;
     }
 
-    .gh a {
+    /* small github at bottom */
+    .github-link {
+      margin-top: 20px;
+      font-size: 0.64rem;
+      color: rgba(226,232,240,0.4);
+    }
+    .github-link a {
       color: #93c5fd;
       text-decoration: none;
-    }
-
-    @media (max-width: 460px) {
-      .rows {
-        padding-left: 12px;
-      }
-      .row {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .value {
-        text-align: left;
-      }
     }
   </style>
 </head>
 <body>
-  <div class="wrap">
+  <main class="page">
     <header class="top">
-      <div class="title-line">
-        <div class="avatar">S</div>
-        <div class="nick-block">
-          <div class="nick">TwojaKsywa</div>
-          <div class="sub">kliknij platformę, wtedy pokażę ci dane</div>
-        </div>
+      <div class="avatar">S</div>
+      <div class="title-block">
+        <div class="nickname">TwojaKsywa</div>
+        <div class="subtitle">kliknij kartę, żeby ją obrócić i zobaczyć dane</div>
       </div>
-      <div class="tags">
-        <span class="tag">Roblox</span>
-        <span class="tag">Riot</span>
-        <span class="tag">Discord</span>
-        <span class="tag">Epic</span>
-        <span class="tag">Spotify</span>
-        <span class="tag">GitHub</span>
+      <div class="filters">
+        <span class="filter-btn">Roblox</span>
+        <span class="filter-btn">Riot</span>
+        <span class="filter-btn">Discord</span>
+        <span class="filter-btn">Epic</span>
+        <span class="filter-btn">Spotify</span>
+        <span class="filter-btn">GitHub</span>
       </div>
     </header>
 
-    <section class="list" id="list">
-      <!-- ROBLOX -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">🧱</div>
-          <div class="item-text">
-            <div class="item-title">Roblox</div>
-            <div class="item-sub">nick / profil / id</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Nick</span>
-              <span class="value">YourRobloxName</span>
+    <section class="grid" id="cards">
+      <!-- Roblox -->
+      <article class="card" data-id="roblox">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">🧱</div>
+              <div>
+                <div class="card-title">Roblox</div>
+                <div class="card-sub">nick / profil / id</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Profil</span>
-              <span class="value">roblox.com/users/123456</span>
-            </div>
+            <p class="front-footer">click to flip</p>
           </div>
-        </div>
-      </article>
-
-      <!-- RIOT -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">⚔</div>
-          <div class="item-text">
-            <div class="item-title">Riot Games</div>
-            <div class="item-sub">LoL / VAL / TFT</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Riot ID</span>
-              <span class="value">Nick#EUW</span>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">🧱</div>
+              <div>
+                <div class="back-title">Roblox</div>
+                <div class="back-sub">dane do dodania</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Valorant</span>
-              <span class="value">YourValo#777</span>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Nick</span>
+                <span class="data-value">YourRobloxName</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Profil</span>
+                <span class="data-value">roblox.com/users/123456</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> copy & add me
             </div>
           </div>
         </div>
       </article>
 
-      <!-- DISCORD -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">💬</div>
-          <div class="item-text">
-            <div class="item-title">Discord</div>
-            <div class="item-sub">kontakt / serwer</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Discord</span>
-              <span class="value">@yourdiscord</span>
+      <!-- Riot -->
+      <article class="card" data-id="riot">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">⚔</div>
+              <div>
+                <div class="card-title">Riot Games</div>
+                <div class="card-sub">LoL / VAL / TFT</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Serwer</span>
-              <span class="value">discord.gg/yourserver</span>
-            </div>
+            <p class="front-footer">click to flip</p>
           </div>
-        </div>
-      </article>
-
-      <!-- EPIC -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">🕹</div>
-          <div class="item-text">
-            <div class="item-title">Epic Games</div>
-            <div class="item-sub">Fortnite / EG</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Nick Fortnite</span>
-              <span class="value">YourFNname</span>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">⚔</div>
+              <div>
+                <div class="back-title">Riot Games</div>
+                <div class="back-sub">ID i region</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Epic ID</span>
-              <span class="value">your-epic-id</span>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Riot ID</span>
+                <span class="data-value">Nick#EUW</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Valorant</span>
+                <span class="data-value">YourValo#777</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> euw
             </div>
           </div>
         </div>
       </article>
 
-      <!-- SPOTIFY -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">🎧</div>
-          <div class="item-text">
-            <div class="item-title">Spotify</div>
-            <div class="item-sub">profil / playlista</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Profil</span>
-              <span class="value">open.spotify.com/user/yourid</span>
+      <!-- Discord -->
+      <article class="card" data-id="discord">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">💬</div>
+              <div>
+                <div class="card-title">Discord</div>
+                <div class="card-sub">kontakt / serwer</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Playlista</span>
-              <span class="value">open.spotify.com/playlist/xyz</span>
+            <p class="front-footer">click to flip</p>
+          </div>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">💬</div>
+              <div>
+                <div class="back-title">Discord</div>
+                <div class="back-sub">mój nick i link</div>
+              </div>
+            </div>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Discord</span>
+                <span class="data-value">@yourdiscord</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Serwer</span>
+                <span class="data-value">discord.gg/yourserver</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> owner
             </div>
           </div>
         </div>
       </article>
 
-      <!-- GITHUB -->
-      <article class="item">
-        <div class="item-header">
-          <div class="icon">🐱</div>
-          <div class="item-text">
-            <div class="item-title">GitHub</div>
-            <div class="item-sub">to jest GitHub!!</div>
-          </div>
-          <svg class="chev" viewBox="0 0 24 24">
-            <path fill="currentColor" d="M12 15.5 5.5 9l1.4-1.4L12 12.7l5.1-5.1L18.5 9z"/>
-          </svg>
-        </div>
-        <div class="item-content">
-          <div class="rows">
-            <div class="row">
-              <span class="label">Account</span>
-              <span class="value">github.com/yourname</span>
+      <!-- Epic -->
+      <article class="card" data-id="epic">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">🕹</div>
+              <div>
+                <div class="card-title">Epic Games</div>
+                <div class="card-sub">Fortnite / EG</div>
+              </div>
             </div>
-            <div class="row">
-              <span class="label">Repo</span>
-              <span class="value">github.com/yourname/bio</span>
+            <p class="front-footer">click to flip</p>
+          </div>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">🕹</div>
+              <div>
+                <div class="back-title">Epic Games</div>
+                <div class="back-sub">nick do dodania</div>
+              </div>
+            </div>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Nick Fortnite</span>
+                <span class="data-value">YourFNname</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Epic ID</span>
+                <span class="data-value">your-epic-id</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> epic
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- Spotify -->
+      <article class="card" data-id="spotify">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">🎧</div>
+              <div>
+                <div class="card-title">Spotify</div>
+                <div class="card-sub">profil / playlist</div>
+              </div>
+            </div>
+            <p class="front-footer">click to flip</p>
+          </div>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">🎧</div>
+              <div>
+                <div class="back-title">Spotify</div>
+                <div class="back-sub">linki</div>
+              </div>
+            </div>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Profil</span>
+                <span class="data-value">open.spotify.com/user/yourid</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Playlista</span>
+                <span class="data-value">open.spotify.com/playlist/xyz</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> music
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- GitHub -->
+      <article class="card" data-id="github">
+        <div class="card-inner">
+          <div class="card-face card-front">
+            <div class="card-topline">
+              <div class="icon-box">🐱</div>
+              <div>
+                <div class="card-title">GitHub</div>
+                <div class="card-sub">to jest GitHub!!</div>
+              </div>
+            </div>
+            <p class="front-footer">click to flip</p>
+          </div>
+          <div class="card-face card-back">
+            <div class="back-head">
+              <div class="icon-box">🐱</div>
+              <div>
+                <div class="back-title">GitHub</div>
+                <div class="back-sub">strona / repo</div>
+              </div>
+            </div>
+            <div class="data-list">
+              <div class="data-row">
+                <span class="data-label">Account</span>
+                <span class="data-value">github.com/yourname</span>
+              </div>
+              <div class="data-row">
+                <span class="data-label">Repo</span>
+                <span class="data-value">github.com/yourname/bio</span>
+              </div>
+            </div>
+            <div class="back-footer">
+              <span class="dot"></span> github page
             </div>
           </div>
         </div>
       </article>
     </section>
 
-    <p class="gh">
-      GitHub strony: <a href="#">(wstaw tu swój link)</a>
-    </p>
-  </div>
+    <p class="github-link">GitHub strony: <a href="#">(wstaw tu swój link)</a></p>
+  </main>
 
   <script>
-    const items = document.querySelectorAll('.item');
+    const cards = document.querySelectorAll('.card');
 
-    items.forEach(item => {
-      const header = item.querySelector('.item-header');
-      const content = item.querySelector('.item-content');
-
-      header.addEventListener('click', () => {
-        const isOpen = item.classList.contains('open');
-
-        // tylko jedna otwarta
-        items.forEach(i => {
-          i.classList.remove('open');
-          i.querySelector('.item-content').style.maxHeight = 0;
+    cards.forEach(card => {
+      card.addEventListener('click', () => {
+        // only one flipped at a time
+        cards.forEach(c => {
+          if (c !== card) c.classList.remove('flipped');
         });
-
-        if (!isOpen) {
-          item.classList.add('open');
-          content.style.maxHeight = content.scrollHeight + 'px';
-        }
-      });
-    });
-
-    // na resize – popraw wysokość
-    window.addEventListener('resize', () => {
-      items.forEach(item => {
-        if (item.classList.contains('open')) {
-          const content = item.querySelector('.item-content');
-          content.style.maxHeight = content.scrollHeight + 'px';
-        }
+        card.classList.toggle('flipped');
       });
     });
   </script>
 </body>
 </html>
+
