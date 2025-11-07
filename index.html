@@ -3,19 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BIO – dark panel</title>
+  <title>red bio</title>
   <style>
     :root {
-      --bg: #0d1117;
-      --panel: #161b22;
-      --panel-dark: #0f141a;
-      --border: #1f242c;
-      --text: #e6edf3;
-      --muted: #8b949e;
-      --accent: #58a6ff;
-      --radius-lg: 16px;
-      --radius-md: 12px;
-      --dur: 0.14s;
+      --red: #ff1a1a;
+      --red-soft: rgba(255, 26, 26, 0.16);
+      --bg-dark: rgba(0, 0, 0, 0.35);
+      --text: #fef2f2;
+      --muted: rgba(254, 242, 242, 0.6);
     }
 
     * {
@@ -25,448 +20,272 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      /* PODMIEN TUTAJ na swój kadr / gif / obraz */
+      background-image: url("https://images.unsplash.com/photo-1668951801992-e40cac7b6990?auto=format&fit=crop&w=1800&q=70");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      position: relative;
       font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      display: flex;
-      justify-content: center;
-      padding: 24px 10px 32px;
+      overflow: hidden;
+      padding: 18px;
     }
 
-    .shell {
-      width: min(1180px, 100%);
-      display: grid;
-      grid-template-columns: 250px 1fr;
-      gap: 16px;
+    /* lekki mrok na całość */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at center, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 70%);
+      pointer-events: none;
     }
 
-    @media (max-width: 860px) {
-      .shell {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    /* LEFT PANEL */
-    .profile-panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      padding: 14px 14px 14px;
+    .center-bio {
+      position: relative;
+      z-index: 5;
+      width: min(520px, 100%);
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      min-height: 520px;
-    }
-
-    .profile-head {
-      display: flex;
-      gap: 10px;
       align-items: center;
+      gap: 14px;
+      text-align: center;
     }
 
-    .avatar {
-      width: 44px;
-      height: 44px;
+    /* avatar */
+    .avatar-wrap {
+      width: 118px;
+      height: 118px;
       border-radius: 999px;
-      background: #238636;
+      background: rgba(0,0,0,0.5);
+      border: 3px solid rgba(255, 26, 26, 0.8);
+      overflow: hidden;
       display: grid;
       place-items: center;
-      font-weight: 700;
-      font-size: 1.05rem;
-      color: #fff;
-      flex: 0 0 auto;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.45);
     }
 
-    .nick-block {
-      flex: 1;
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
     .nick {
-      font-weight: 600;
-      font-size: 0.95rem;
-    }
-
-    .desc {
-      font-size: 0.65rem;
-      color: var(--muted);
-    }
-
-    .tags-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-
-    .tag {
-      background: #0d1117;
-      border: 1px solid #21262d;
-      border-radius: 999px;
-      padding: 3px 9px 2px;
-      font-size: 0.62rem;
-      color: #d0d7de;
-    }
-
-    .menu-label {
-      font-size: 0.6rem;
-      color: #6e7681;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 0.12rem;
+      color: var(--red);
       text-transform: uppercase;
-      letter-spacing: .04em;
-      margin-top: 4px;
+      text-shadow: 0 3px 10px rgba(0,0,0,0.7);
     }
 
-    .service-list {
+    .icons-row {
       display: flex;
-      flex-direction: column;
-      gap: 4px;
+      gap: 6px;
+      font-size: 1.05rem;
+      color: var(--red);
+      justify-content: center;
     }
 
-    .service-btn {
-      background: transparent;
-      border: none;
-      display: flex;
-      gap: 10px;
+    .small-text {
+      font-size: 0.68rem;
+      color: var(--muted);
+      letter-spacing: 0.25rem;
+      text-transform: uppercase;
+    }
+
+    .location {
+      display: inline-flex;
       align-items: center;
-      border-radius: 6px;
-      padding: 6px 6px;
-      cursor: pointer;
-      transition: background var(--dur) ease;
+      gap: 4px;
+      font-size: 0.7rem;
+      color: var(--text);
+      text-shadow: 0 1px 5px rgba(0,0,0,0.5);
     }
 
-    .service-btn:hover {
-      background: rgba(240, 246, 252, 0.03);
+    /* glass card */
+    .glass-card {
+      width: min(490px, 100%);
+      background: rgba(10, 10, 10, 0.28);
+      border: 1px solid rgba(255, 26, 26, 0.14);
+      border-radius: 26px;
+      backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.35);
     }
 
-    .service-btn.active {
-      background: #1f6feb22;
-      outline: 1px solid #1f6feb55;
-    }
-
-    .service-icon {
-      width: 30px;
-      height: 30px;
+    .glass-avatar {
+      width: 52px;
+      height: 52px;
       border-radius: 999px;
-      background: #0f141a;
-      border: 1px solid #222;
-      display: grid;
-      place-items: center;
-      font-size: 1rem;
+      overflow: hidden;
+      border: 2px solid rgba(255, 26, 26, 0.5);
       flex: 0 0 auto;
     }
 
-    .service-text {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
+    .glass-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
 
-    .service-name {
-      font-size: 0.75rem;
+    .glass-info {
+      text-align: left;
+      flex: 1;
     }
 
-    .service-sub {
-      font-size: 0.58rem;
-      color: #6e7681;
+    .glass-title {
+      font-weight: 600;
+      color: var(--text);
+      font-size: 0.8rem;
     }
 
-    .bottom-link {
-      margin-top: auto;
+    .glass-sub {
       font-size: 0.6rem;
-      color: #6e7681;
-      background: #0f141a;
-      border: 1px solid #21262d;
-      border-radius: 6px;
-      padding: 5px 6px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.02rem;
     }
 
-    .bottom-link a {
-      color: #58a6ff;
-      text-decoration: none;
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #22c55e;
+      display: inline-block;
+      margin-right: 6px;
     }
 
-    /* RIGHT PANEL */
-    .content-panel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      min-height: 520px;
+    .last-row {
+      margin-top: 3px;
+      font-size: 0.6rem;
+      color: rgba(255, 26, 26, 0.85);
+    }
+
+    /* social icons bottom */
+    .social-bar {
+      margin-top: 4px;
       display: flex;
-      flex-direction: column;
-      padding: 14px 14px 14px;
-    }
-
-    .section-head {
-      display: flex;
+      gap: 14px;
+      justify-content: center;
       align-items: center;
-      gap: 10px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid #21262d;
     }
 
-    .section-icon {
+    .social-btn {
       width: 32px;
       height: 32px;
       border-radius: 999px;
-      background: #0f141a;
-      border: 1px solid #222;
+      border: 1px solid rgba(255, 26, 26, 0.3);
+      background: rgba(0,0,0,0.35);
       display: grid;
       place-items: center;
-      font-size: 1.25rem;
+      font-size: 0.85rem;
+      color: var(--text);
+      cursor: pointer;
+      transition: transform 0.12s ease;
     }
 
-    .section-text {
+    .social-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255, 26, 26, 0.33);
+    }
+
+    .footer-line {
+      margin-top: 6px;
+      font-size: 0.6rem;
+      color: rgba(255, 26, 26, 0.8);
       display: flex;
-      flex-direction: column;
-    }
-
-    .section-title {
-      font-weight: 600;
-    }
-
-    .section-sub {
-      font-size: 0.62rem;
-      color: #8b949e;
-    }
-
-    .content-body {
-      padding-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      transition: opacity .12s ease;
-      opacity: 1;
-    }
-
-    .content-body.hidden {
-      opacity: 0;
-    }
-
-    .row {
-      background: #0f141a;
-      border: 1px solid #1f242c;
-      border-radius: 6px;
-      padding: 6px 8px;
-      display: flex;
-      justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
-      font-size: 0.7rem;
     }
 
-    .row-label {
-      color: #d0d7de;
-      font-weight: 500;
+    .dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.55);
     }
 
-    .row-value {
-      color: #58a6ff;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 0.66rem;
-      text-align: right;
-      max-width: 320px;
-      overflow-wrap: anywhere;
-    }
-
-    @media (max-width: 560px) {
-      .row {
-        flex-direction: column;
-        align-items: flex-start;
+    @media (max-width: 520px) {
+      .glass-card {
+        gap: 10px;
       }
-      .row-value {
-        text-align: left;
+      .nick {
+        font-size: 1.6rem;
       }
-    }
-
-    .hint {
-      margin-top: auto;
-      font-size: 0.58rem;
-      color: #6e7681;
-      padding-top: 6px;
-      border-top: 1px solid #21262d;
+      .center-bio {
+        gap: 12px;
+      }
+      .social-bar {
+        gap: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <main class="shell">
-    <!-- LEFT -->
-    <aside class="profile-panel">
-      <div class="profile-head">
-        <div class="avatar">S</div>
-        <div class="nick-block">
-          <div class="nick">TwojaKsywa</div>
-          <div class="desc">twoje dane do gier i platform</div>
-        </div>
-      </div>
-      <div class="tags-row">
-        <span class="tag">Roblox</span>
-        <span class="tag">Riot</span>
-        <span class="tag">Discord</span>
-        <span class="tag">Epic</span>
-        <span class="tag">Spotify</span>
-        <span class="tag">GitHub</span>
-      </div>
-      <p class="menu-label">Platformy</p>
-      <div class="service-list">
-        <button class="service-btn active" data-service="roblox">
-          <span class="service-icon">🧱</span>
-          <span class="service-text">
-            <span class="service-name">Roblox</span>
-            <span class="service-sub">nick / profil / id</span>
-          </span>
-        </button>
-        <button class="service-btn" data-service="riot">
-          <span class="service-icon">⚔</span>
-          <span class="service-text">
-            <span class="service-name">Riot Games</span>
-            <span class="service-sub">LoL / VAL / TFT</span>
-          </span>
-        </button>
-        <button class="service-btn" data-service="discord">
-          <span class="service-icon">💬</span>
-          <span class="service-text">
-            <span class="service-name">Discord</span>
-            <span class="service-sub">kontakt / serwer</span>
-          </span>
-        </button>
-        <button class="service-btn" data-service="epic">
-          <span class="service-icon">🕹</span>
-          <span class="service-text">
-            <span class="service-name">Epic Games</span>
-            <span class="service-sub">Fortnite / EG</span>
-          </span>
-        </button>
-        <button class="service-btn" data-service="spotify">
-          <span class="service-icon">🎧</span>
-          <span class="service-text">
-            <span class="service-name">Spotify</span>
-            <span class="service-sub">profil / playlista</span>
-          </span>
-        </button>
-        <button class="service-btn" data-service="github">
-          <span class="service-icon">🐱</span>
-          <span class="service-text">
-            <span class="service-name">GitHub</span>
-            <span class="service-sub">to jest GitHub!!</span>
-          </span>
-        </button>
-      </div>
+  <main class="center-bio">
+    <!-- avatar -->
+    <div class="avatar-wrap">
+      <!-- podmień src na swój avatar -->
+      <img src="https://i.imgur.com/0Zf7K8k.jpeg" alt="avatar">
+    </div>
 
-      <div class="bottom-link">
-        GitHub strony: <a href="#">(wstaw tu swój link)</a>
-      </div>
-    </aside>
+    <!-- nick -->
+    <div class="nick">D3ATH</div>
 
-    <!-- RIGHT -->
-    <section class="content-panel">
-      <div class="section-head">
-        <div class="section-icon" id="section-icon">🧱</div>
-        <div class="section-text">
-          <div class="section-title" id="section-title">Roblox</div>
-          <div class="section-sub" id="section-sub">nick / profil / id</div>
-        </div>
+    <!-- ozdobne ikonki -->
+    <div class="icons-row">
+      <span>✖</span>
+      <span>❤</span>
+      <span>★</span>
+      <span>♞</span>
+      <span>♠</span>
+    </div>
+
+    <!-- opis -->
+    <div class="small-text">MY DATA</div>
+    <div class="location">📍 BALTIMORE</div>
+
+    <!-- mała szklana karta jak z ss -->
+    <div class="glass-card">
+      <div class="glass-avatar">
+        <img src="https://i.imgur.com/0Zf7K8k.jpeg" alt="pfp">
       </div>
-      <div class="content-body" id="content-body">
-        <div id="rows"></div>
+      <div class="glass-info">
+        <div class="glass-title">FOREIGNSLUTZ <span style="color:#38bdf8;">✔</span></div>
+        <div class="glass-sub"><span class="status-dot"></span>currently doing nothing</div>
+        <div class="last-row">view below everything ↓</div>
       </div>
-      <p class="hint">kliknij inną platformę po lewej, żeby podmienić dane</p>
-    </section>
+      <div style="font-size:1.2rem;color:var(--red);">●</div>
+    </div>
+
+    <!-- ikony platform (tu wstaw swoje: roblox, riot, discord itd) -->
+    <div class="social-bar">
+      <!-- Roblox -->
+      <div class="social-btn" title="Roblox">🧱</div>
+      <!-- Riot -->
+      <div class="social-btn" title="Riot">⚔</div>
+      <!-- Discord -->
+      <div class="social-btn" title="Discord">💬</div>
+      <!-- Epic -->
+      <div class="social-btn" title="Epic Games">🕹</div>
+      <!-- Spotify -->
+      <div class="social-btn" title="Spotify">🎧</div>
+      <!-- GitHub -->
+      <div class="social-btn" title="GitHub">🐱</div>
+    </div>
+
+    <div class="footer-line">
+      👁 7,928 <span class="dot"></span> everywhere
+    </div>
   </main>
-
-  <script>
-    // placeholder data
-    const DATA = {
-      roblox: {
-        icon: "🧱",
-        title: "Roblox",
-        sub: "nick / profil / id",
-        rows: [
-          { label: "Nick", value: "YourRobloxName" },
-          { label: "Profil", value: "roblox.com/users/123456" }
-        ]
-      },
-      riot: {
-        icon: "⚔",
-        title: "Riot Games",
-        sub: "LoL / VAL / TFT",
-        rows: [
-          { label: "Riot ID", value: "Nick#EUW" },
-          { label: "Valorant", value: "YourValo#777" }
-        ]
-      },
-      discord: {
-        icon: "💬",
-        title: "Discord",
-        sub: "kontakt / serwer",
-        rows: [
-          { label: "Discord", value: "@yourdiscord" },
-          { label: "Serwer", value: "discord.gg/yourserver" }
-        ]
-      },
-      epic: {
-        icon: "🕹",
-        title: "Epic Games",
-        sub: "Fortnite / EG",
-        rows: [
-          { label: "Nick Fortnite", value: "YourFNname" },
-          { label: "Epic ID", value: "your-epic-id" }
-        ]
-      },
-      spotify: {
-        icon: "🎧",
-        title: "Spotify",
-        sub: "profil / playlista",
-        rows: [
-          { label: "Profil", value: "open.spotify.com/user/yourid" },
-          { label: "Playlista", value: "open.spotify.com/playlist/xyz" }
-        ]
-      },
-      github: {
-        icon: "🐱",
-        title: "GitHub",
-        sub: "to jest GitHub!!",
-        rows: [
-          { label: "Account", value: "github.com/yourname" },
-          { label: "Repo", value: "github.com/yourname/bio" }
-        ]
-      }
-    };
-
-    const buttons = document.querySelectorAll(".service-btn");
-    const sectionIcon = document.getElementById("section-icon");
-    const sectionTitle = document.getElementById("section-title");
-    const sectionSub = document.getElementById("section-sub");
-    const contentBody = document.getElementById("content-body");
-    const rowsBox = document.getElementById("rows");
-
-    function render(service) {
-      const data = DATA[service];
-      if (!data) return;
-      contentBody.classList.add("hidden");
-      setTimeout(() => {
-        sectionIcon.textContent = data.icon;
-        sectionTitle.textContent = data.title;
-        sectionSub.textContent = data.sub;
-        rowsBox.innerHTML = "";
-        data.rows.forEach(row => {
-          const el = document.createElement("div");
-          el.className = "row";
-          el.innerHTML = `<span class="row-label">${row.label}</span><span class="row-value">${row.value}</span>`;
-          rowsBox.appendChild(el);
-        });
-        contentBody.classList.remove("hidden");
-      }, 80);
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        buttons.forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        const id = btn.getAttribute("data-service");
-        render(id);
-      });
-    });
-
-    // init
-    render("roblox");
-  </script>
 </body>
 </html>
