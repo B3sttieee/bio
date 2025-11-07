@@ -3,382 +3,320 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Orbit Bio</title>
+  <title>Moje Bio / Platformy</title>
   <style>
     :root {
-      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 50%, #000 100%);
-      --tile: rgba(5, 9, 22, 0.4);
-      --tile-border: rgba(226, 232, 240, 0.06);
-      --tile-hover: rgba(18, 31, 58, 0.55);
-      --panel: rgba(2, 6, 23, 0.82);
-      --panel-border: rgba(148, 163, 184, 0.2);
+      --bg: radial-gradient(circle at top, #0f172a 0%, #020617 55%, #000 100%);
+      --surface: rgba(2, 6, 23, 0.55);
+      --surface-soft: rgba(2, 6, 23, 0.35);
+      --border: rgba(148, 163, 184, 0.08);
       --text: #e2e8f0;
-      --muted: rgba(226, 232, 240, 0.5);
-      --dur: 0.25s;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --radius: 18px;
+      --dur: .18s;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       min-height: 100vh;
       background: var(--bg);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text);
-      display: grid;
-      place-items: center;
-      overflow: hidden;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 28px 14px 40px;
     }
-
-    /* delikatna siatka */
-    .grid-bg {
-      position: fixed;
-      inset: 0;
-      background-image:
-        linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(148, 163, 184, 0.03) 1px, transparent 1px);
-      background-size: 90px 90px;
-      pointer-events: none;
-      opacity: .6;
+    .page {
+      width: min(1050px, 100%);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
-
-    .scene {
-      position: relative;
-      width: min(820px, 100%);
-      aspect-ratio: 1 / 1;
-      display: grid;
-      place-items: center;
+    /* BIO */
+    .bio {
+      background: rgba(15,23,42,0.32);
+      border: 1px solid rgba(148, 163, 184, 0.08);
+      border-radius: 20px;
+      padding: 14px 16px 16px;
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      backdrop-filter: blur(12px);
     }
-
-    /* kula w środku */
-    .core {
-      position: relative;
-      width: 180px;
-      height: 180px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 70%);
-      border: 3px solid rgba(226,232,240,0.45);
-      box-shadow: 0 30px 70px rgba(0,0,0,0.35);
-      display: grid;
-      place-items: center;
-      z-index: 3;
-    }
-    .core-icon {
-      font-size: 58px;
-      color: #020617;
-      text-shadow: 0 6px 16px rgba(0,0,0,.45);
-    }
-
-    /* cienki pierścień */
-    .ring {
-      position: absolute;
-      width: 360px;
-      height: 360px;
-      border-radius: 999px;
-      border: 1px dashed rgba(148, 163, 184, 0.2);
-    }
-
-    /* orbita */
-    .orbit {
-      position: absolute;
-      width: 460px;
-      height: 460px;
-      animation: orbit 18s linear infinite;
-      transform-origin: center;
-    }
-    @keyframes orbit {
-      to { transform: rotate(360deg); }
-    }
-
-    /* kafelek */
-    .tile {
-      position: absolute;
-      width: 105px;
-      height: 105px;
-      border-radius: 26px;
-      background: var(--tile);
-      border: 1px solid var(--tile-border);
-      backdrop-filter: blur(8px);
-      display: grid;
-      place-items: center;
-      transition: transform .15s ease, background .15s ease, border .15s ease;
-      box-shadow: 0 16px 35px rgba(0,0,0,0.2);
-      cursor: pointer;
-      /* to sprawia że kafelek się obraca w drugą stronę i wygląda jakby stał prosto */
-      animation: counter 18s linear infinite;
-    }
-    @keyframes counter {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(-360deg); }
-    }
-
-    .tile:hover {
-      background: var(--tile-hover);
-      border: 1px solid rgba(226,232,240,0.15);
-    }
-    .tile.active {
-      border: 1px solid rgba(56,189,248,0.8);
-      background: rgba(15, 23, 42, 0.65);
-    }
-
-    .tile-icon {
-      font-size: 1.8rem;
-      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5));
-    }
-
-    /* ustawienia kafelków jak na screenie */
-    .tile.t1 { top: 12px; left: 50%; transform-origin: center; }
-    .tile.t2 { right: 60px; top: 110px; }
-    .tile.t3 { right: 70px; bottom: 115px; }
-    .tile.t4 { bottom: 18px; left: 50%; transform-origin: center; }
-    .tile.t5 { left: 70px; bottom: 115px; }
-    .tile.t6 { left: 60px; top: 110px; }
-
-    /* panel danych na dole */
-    .data-panel {
-      position: fixed;
-      bottom: 14px;
-      left: 50%;
-      transform: translate(-50%, 120%);
-      width: min(520px, 100% - 20px);
-      background: var(--panel);
-      border: 1px solid var(--panel-border);
+    .avatar {
+      width: 56px;
+      height: 56px;
       border-radius: 16px;
-      backdrop-filter: blur(14px);
-      box-shadow: 0 16px 60px rgba(0,0,0,0.45);
-      padding: 10px 14px 12px;
-      transition: transform var(--dur) ease, opacity var(--dur) ease;
-      opacity: 0;
-      z-index: 10;
+      background: radial-gradient(circle at 30% 30%, #38bdf8 0%, #020617 80%);
+      border: 2px solid rgba(226,232,240,0.4);
+      display: grid;
+      place-items: center;
+      font-size: 28px;
+      font-weight: 700;
+      flex: 0 0 auto;
     }
-    .data-panel.show {
-      transform: translate(-50%, 0);
-      opacity: 1;
+    .bio-info {
+      flex: 1;
     }
-
-    .panel-head {
+    .name {
+      font-weight: 650;
+    }
+    .subtitle {
+      font-size: .7rem;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+    .tag-row {
+      margin-top: 8px;
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+    .tag {
+      background: rgba(15,23,42,0.5);
+      border: 1px solid rgba(148,163,184,0.13);
+      border-radius: 999px;
+      padding: 3px 10px 2px;
+      font-size: .62rem;
+    }
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 720px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .bio {
+        flex-wrap: wrap;
+      }
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 12px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform var(--dur) ease, border var(--dur) ease, box-shadow var(--dur) ease;
+    }
+    .card:hover {
+      transform: translateY(-2px);
+      border: 1px solid rgba(56,189,248,0.35);
+      box-shadow: 0 16px 35px rgba(3,105,161,0.08);
+    }
+    .card-head {
       display: flex;
       gap: 10px;
       align-items: center;
     }
-    .panel-icon {
-      width: 32px;
-      height: 32px;
-      border-radius: 12px;
-      background: rgba(15,23,42,0.35);
+    .icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 14px;
+      background: rgba(15,23,42,0.4);
+      border: 1px solid rgba(148,163,184,0.05);
       display: grid;
       place-items: center;
-      font-size: 1.2rem;
+      font-size: 1.25rem;
     }
-    .panel-title {
+    .title {
       font-weight: 600;
     }
-    .panel-sub {
-      font-size: 0.63rem;
+    .desc {
+      font-size: 0.65rem;
       color: var(--muted);
+      margin-top: 2px;
     }
-    .panel-close {
-      margin-left: auto;
-      background: rgba(248,113,113,0.05);
-      border: 1px solid rgba(248,113,113,0.25);
-      border-radius: 999px;
-      font-size: 0.55rem;
-      padding: 2px 7px 1px;
-      color: #fee2e2;
-      cursor: pointer;
-    }
-
-    .panel-body {
+    .fields {
       display: flex;
       flex-direction: column;
       gap: 6px;
-      margin-top: 5px;
     }
-    .panel-row {
-      background: rgba(15,23,42,0.3);
-      border: 1px solid rgba(148,163,184,0.08);
-      border-radius: 10px;
-      padding: 4px 7px 3px;
+    .field {
+      background: rgba(15,23,42,0.2);
+      border: 1px solid rgba(148,163,184,0.05);
+      border-radius: 12px;
+      padding: 5px 7px 4px;
       display: flex;
       justify-content: space-between;
-      gap: 6px;
-      font-size: 0.68rem;
+      gap: 8px;
     }
-    .panel-label {
-      color: rgba(226,232,240,0.75);
+    .field-label {
+      font-size: 0.66rem;
+      color: var(--muted);
     }
-    .panel-value {
-      color: #bae6fd;
+    .field-value {
+      font-size: 0.66rem;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      max-width: 250px;
+      color: #e2e8f0;
+      max-width: 60%;
       text-align: right;
       overflow-wrap: anywhere;
     }
-
-    @media (max-width: 600px) {
-      .scene { width: 100%; }
-      .core { width: 140px; height: 140px; }
-      .orbit { width: 350px; height: 350px; }
-      .tile { width: 88px; height: 88px; }
-      .data-panel { width: 100%; border-radius: 16px 16px 0 0; }
+    .pill-small {
+      background: rgba(56,189,248,0.12);
+      border: 1px solid rgba(125,211,252,0.25);
+      border-radius: 999px;
+      padding: 2px 6px 1px;
+      font-size: 0.6rem;
+      width: fit-content;
+      margin-top: 2px;
     }
   </style>
 </head>
 <body>
-  <div class="grid-bg"></div>
+  <main class="page">
+    <!-- BIO -->
+    <section class="bio">
+      <div class="avatar">🌀</div>
+      <div class="bio-info">
+        <div class="name">TwojaKsywa</div>
+        <div class="subtitle">bio • dane do gier i platform • kontakt</div>
+        <div class="tag-row">
+          <span class="tag">Roblox</span>
+          <span class="tag">Riot</span>
+          <span class="tag">Discord</span>
+          <span class="tag">Epic</span>
+          <span class="tag">Spotify</span>
+          <span class="tag">GitHub</span>
+        </div>
+      </div>
+    </section>
 
-  <main class="scene">
-    <div class="core">
-      <div class="core-icon">🌀</div>
-    </div>
-    <div class="ring"></div>
+    <!-- KARTY Z DANYMI -->
+    <section class="grid">
+      <!-- Roblox -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">🧱</div>
+          <div>
+            <div class="title">Roblox</div>
+            <div class="desc">nick / profil</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Nick</span>
+            <span class="field-value">YourRobloxName</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Profil</span>
+            <span class="field-value">roblox.com/users/123456</span>
+          </div>
+        </div>
+      </article>
 
-    <div class="orbit" id="orbit">
-      <div class="tile t1" data-platform="github" title="GitHub">
-        <span class="tile-icon">🐱</span>
-      </div>
-      <div class="tile t2" data-platform="riot" title="Riot Games">
-        <span class="tile-icon">⚔</span>
-      </div>
-      <div class="tile t3" data-platform="roblox" title="Roblox">
-        <span class="tile-icon">🧱</span>
-      </div>
-      <div class="tile t4" data-platform="epic" title="Epic Games">
-        <span class="tile-icon">🕹</span>
-      </div>
-      <div class="tile t5" data-platform="spotify" title="Spotify">
-        <span class="tile-icon">🎧</span>
-      </div>
-      <div class="tile t6" data-platform="discord" title="Discord">
-        <span class="tile-icon">💬</span>
-      </div>
-    </div>
+      <!-- Riot -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">⚔</div>
+          <div>
+            <div class="title">Riot Games</div>
+            <div class="desc">LoL / VAL / TFT</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Riot ID</span>
+            <span class="field-value">Nick#EUW</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Valorant</span>
+            <span class="field-value">YourValo#777</span>
+          </div>
+          <span class="pill-small">Region: EU</span>
+        </div>
+      </article>
+
+      <!-- Discord -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">💬</div>
+          <div>
+            <div class="title">Discord</div>
+            <div class="desc">kontakt / serwer</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Discord</span>
+            <span class="field-value">@yourdiscord</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Serwer</span>
+            <span class="field-value">discord.gg/yourserver</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Epic Games -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">🕹</div>
+          <div>
+            <div class="title">Epic Games</div>
+            <div class="desc">Fortnite / EG nick</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Nick Fortnite</span>
+            <span class="field-value">YourFNname</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Epic ID</span>
+            <span class="field-value">your-epic-id</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- Spotify -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">🎧</div>
+          <div>
+            <div class="title">Spotify</div>
+            <div class="desc">profil / playlista</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Profil</span>
+            <span class="field-value">open.spotify.com/user/yourid</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Playlista</span>
+            <span class="field-value">open.spotify.com/playlist/xyz</span>
+          </div>
+        </div>
+      </article>
+
+      <!-- GitHub -->
+      <article class="card">
+        <header class="card-head">
+          <div class="icon">🐱</div>
+          <div>
+            <div class="title">GitHub</div>
+            <div class="desc">to jest GitHub!!</div>
+          </div>
+        </header>
+        <div class="fields">
+          <div class="field">
+            <span class="field-label">Account</span>
+            <span class="field-value">github.com/yourname</span>
+          </div>
+          <div class="field">
+            <span class="field-label">Repo</span>
+            <span class="field-value">github.com/yourname/bio</span>
+          </div>
+        </div>
+      </article>
+    </section>
   </main>
-
-  <!-- panel z danymi -->
-  <div class="data-panel" id="data-panel">
-    <div class="panel-head">
-      <div class="panel-icon" id="p-icon">🧱</div>
-      <div>
-        <div class="panel-title" id="p-title">Roblox</div>
-        <div class="panel-sub" id="p-sub">nick / profil</div>
-      </div>
-      <button class="panel-close" id="p-close">zamknij</button>
-    </div>
-    <div class="panel-body" id="p-body">
-      <!-- tu wpadają dane z JS -->
-    </div>
-  </div>
-
-  <script>
-    // Twoje dane – podmień na swoje
-    const DATA = {
-      github: {
-        icon: "🐱",
-        title: "GitHub",
-        sub: "to jest GitHub!!",
-        rows: [
-          { label: "Account", value: "github.com/yourname" },
-          { label: "Repo", value: "github.com/yourname/bio" }
-        ]
-      },
-      riot: {
-        icon: "⚔",
-        title: "Riot Games",
-        sub: "LoL / VAL / TFT",
-        rows: [
-          { label: "Riot ID", value: "Nick#EUW" },
-          { label: "Valorant", value: "YourValo#777" }
-        ]
-      },
-      roblox: {
-        icon: "🧱",
-        title: "Roblox",
-        sub: "nick / profil",
-        rows: [
-          { label: "Nick", value: "YourRobloxName" },
-          { label: "Profil", value: "roblox.com/users/123456" }
-        ]
-      },
-      epic: {
-        icon: "🕹",
-        title: "Epic Games",
-        sub: "Fortnite / EG",
-        rows: [
-          { label: "Nick FN", value: "YourFNname" },
-          { label: "Epic ID", value: "your-epic-id" }
-        ]
-      },
-      spotify: {
-        icon: "🎧",
-        title: "Spotify",
-        sub: "profil / playlisty",
-        rows: [
-          { label: "Profil", value: "open.spotify.com/user/yourid" },
-          { label: "Playlista", value: "open.spotify.com/playlist/xyz" }
-        ]
-      },
-      discord: {
-        icon: "💬",
-        title: "Discord",
-        sub: "kontakt / serwer",
-        rows: [
-          { label: "Discord", value: "@yourdiscord" },
-          { label: "Serwer", value: "discord.gg/yourserver" }
-        ]
-      }
-    };
-
-    const tiles = document.querySelectorAll(".tile");
-    const panel = document.getElementById("data-panel");
-    const pIcon = document.getElementById("p-icon");
-    const pTitle = document.getElementById("p-title");
-    const pSub = document.getElementById("p-sub");
-    const pBody = document.getElementById("p-body");
-    const pClose = document.getElementById("p-close");
-
-    tiles.forEach(tile => {
-      tile.addEventListener("click", (e) => {
-        const key = tile.dataset.platform;
-        const data = DATA[key];
-        if (!data) return;
-
-        // zaznacz kafelek, ale NIE zatrzymuj obrotu
-        tiles.forEach(t => t.classList.remove("active"));
-        tile.classList.add("active");
-
-        // ustaw panel
-        pIcon.textContent = data.icon;
-        pTitle.textContent = data.title;
-        pSub.textContent = data.sub;
-        pBody.innerHTML = "";
-        data.rows.forEach(row => {
-          const div = document.createElement("div");
-          div.className = "panel-row";
-          div.innerHTML = `<span class="panel-label">${row.label}</span><span class="panel-value">${row.value}</span>`;
-          pBody.appendChild(div);
-        });
-
-        panel.classList.add("show");
-        e.stopPropagation();
-      });
-    });
-
-    pClose.addEventListener("click", () => {
-      panel.classList.remove("show");
-      tiles.forEach(t => t.classList.remove("active"));
-    });
-
-    document.addEventListener("click", (e) => {
-      const insidePanel = e.target.closest(".data-panel");
-      const insideTile = e.target.closest(".tile");
-      if (!insidePanel && !insideTile) {
-        panel.classList.remove("show");
-        tiles.forEach(t => t.classList.remove("active"));
-      }
-    });
-  </script>
 </body>
 </html>
